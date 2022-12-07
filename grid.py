@@ -86,7 +86,7 @@ def is_row_full(grid, y):
 def bring_cube_down_from_column_index(grid, rowIndex):
     if rowIndex < 0 or rowIndex >= len(grid[0]) - 1:
         return
-    for y in range(rowIndex, 0, -1):
+    for y in range(rowIndex, -1, -1):
         for x in range(len(grid)):
             if grid[y + 1][x] == 1 and grid[y][x] == 2:
                 grid[y + 1][x] = 2
@@ -97,7 +97,34 @@ def fill_column(grid, x):
         if grid[y][x] == 1:
             grid[y][x] = 2
 
+
+def empty_column(grid, x):
+    for y in range(len(grid)):
+        if grid[y][x] == 2:
+            grid[y][x] = 1
+
 def fill_row(grid, y):
     for x in range(len(grid[y])):
         if grid[y][x] == 1:
             grid[y][x] = 2
+
+
+def empty_row(grid, y):
+    for x in range(len(grid[y])):
+        if grid[y][x] == 2:
+            grid[y][x] = 1
+
+
+def fill_all_grid(grid):
+    for y in range(len(grid)):
+        for x in range(len(grid[y])):
+            if grid[y][x] == 1:
+                grid[y][x] = 2
+
+def check_for_full_row_or_column(grid):
+    for y in range(len(grid)):
+        if is_row_full(grid, y):
+            empty_row(grid, y)
+    for x in range(len(grid[0])):
+        if is_column_full(grid, x):
+            empty_column(grid, x)

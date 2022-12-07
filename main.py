@@ -2,11 +2,19 @@ import grid
 import termilib
 
 use_termilib = False
+grid = []
+gridView = []
+blockView = []
 
 
 def main():
     print("Welcome to BoxFiller !")
-    menu()
+    ##menu()
+    board = grid.create_circle_grid(21)
+    grid.fill_all_grid(board)
+    show_grid(board)
+    grid.check_for_full_row_or_column(board)
+    show_grid(board)
     input("Press any key to continue")
 
 
@@ -14,15 +22,27 @@ def init_game():
     gridType = select_grid_type()
     gridSize = select_grid_size()
 
+    global grid
     if gridType == "1":
-        show_grid(grid.create_circle_grid(gridSize))
+        grid = grid.create_circle_grid(gridSize)
     elif gridType == "2":
-        show_grid(grid.create_triangle_grid(gridSize))
+        grid = grid.create_triangle_grid(gridSize)
     elif gridType == "3":
-        show_grid(grid.create_lozenge_grid(gridSize))
+        gird = grid.create_lozenge_grid(gridSize)
 
 
-def compute_score(bloc_casse) :
+def show_board(grid):
+    return
+
+
+def playLoop():
+    show_board(grid)
+
+
+    playLoop()
+
+
+def compute_score(bloc_casse):
     score = bloc_casse ** 2
     return score
 
@@ -70,31 +90,79 @@ def show_rules() :
 # Basic Terminal Interface
 #
 
+viewLine = 0
+
+def set_line_view(line):
+    global viewLine
+    viewLine = line
+
+def increment_view_line():
+    global viewLine
+    viewLine += 1
+
+def add_to_view(value, view):
+    if (viewLine >= len(view)):
+        for i in range(len(view), viewLine):
+            gridView.append([])
+    view[viewLine] = view[viewLine] + value
+
+def add_line_to_view(line, view):
+    view.append(line)
+    viewLine += 1
+
+
+def show_view(view):
+    for line in view:
+        print(line)
+
+def clear_view(view):
+    view.clear()
+
+
 def show_grid_basic(grid):
+    set_line_view(0)
     print("    ", end="")
-    for i in range (len(grid[0])):
-        print(chr(65 + i), end="  ")
-    print()
-    print("  ╔", end="")
+    add_to_view("    ", gridView)
     for i in range(len(grid[0])):
-        print("═", end="══")
-    print("╗", end="")
+        print(chr(65 + i), end="  ")
+        add_to_view(chr(65 + i) + "  ", gridView)
     print()
+    increment_view_line()
+    print("  ╔", end="")
+    add_to_view("  ╔", gridView)
+    for i in range(len(grid[0])):
+        print("═══", end="")
+        add_to_view("═══", gridView)
+    print("╗", end="")
+    add_to_view("╗", gridView)
+    print()
+    increment_view_line()
     for y in range (len(grid)):
         print(chr(97 + y), "║", end="")
+        add_to_view(chr(97 + y) + "║", gridView)
         for x in range(len(grid[y])):
             if grid[y][x] == 1:
-                print(".", end="  ")
+                print(".  ", end="")
+                add_to_view(".  ", gridView)
             elif grid[y][x] == 2:
-                print(chr(254), end="  ")
+                print("■  ", end="")
+                add_to_view("■  ", gridView)
             elif grid[y][x] == 0:
-                print(" ", end="  ")
+                print("   ", end="")
+                add_to_view("   ", gridView)
         print("║")
+        add_to_view("║", gridView)
+        increment_view_line()
     print("  ╚" , end="")
+    add_to_view("  ╚", gridView)
     for  i in range (len(grid[0])):
-        print("═", end="══")
+        print("═══", end="")
+        add_to_view("═══", gridView)
     print("╝")
-
+    add_to_view("╝", gridView)
+    increment_view_line()
+    print("view mode")
+    show_view(gridView)
 
 
 def select_grid_type_basic():
