@@ -1,9 +1,20 @@
 import grid
 import termilib
+import random
 
 use_termilib = False
 
+stock_blocks = []
 
+def stock(stock_blocks) :
+    a = 0
+    b = 0
+    c = 0
+    while a == b and a == c and b == c :
+        a = random.randint(0, len(stock_blocks) - 1)
+        b = random.randint(0, len(stock_blocks) - 1)
+        c = random.randint(0, len(stock_blocks) - 1)
+    return stock_blocks[a], stock_blocks[b], stock_blocks[c]
 def main():
     print("Welcome to BoxFiller !")
     menu()
@@ -136,7 +147,10 @@ def menu_basic():
 
 
 def show_rules_basic() :
-    print("règles")
+    regles = open("Regles.txt", "r", encoding="utf-8")
+    regle = regles.readlines()
+    for ligne in regle :
+        print(ligne, end="")
     input("Press any key to continue")
     menu()
 
