@@ -9,7 +9,7 @@ blockView = []
 
 stock_blocks = []
 
-def stock(stock_blocks) :
+def random_blocks(stock_blocks) :
     a = 0
     b = 0
     c = 0
@@ -18,6 +18,33 @@ def stock(stock_blocks) :
         b = random.randint(0, len(stock_blocks) - 1)
         c = random.randint(0, len(stock_blocks) - 1)
     return stock_blocks[a], stock_blocks[b], stock_blocks[c]
+
+def get_block_for_board_choice(choice) :
+    grid_blocks = listdir("Level\Blocks\common")
+    if choice == 1:
+        grid_blocks += listdir("Level\Blocks\circle")
+    elif choice == 2:
+        grid_blocks += listdir("Level\Blocks\\triangle")
+    elif choice == 3:
+        grid_blocks += listdir("Level\Blocks\lozenge")
+    return grid_blocks
+
+
+def get_blocks_from_files(grid_blocks):
+    list_block_mat = []
+    for blocks in grid_blocks:
+        block_mat = []
+        block_file = open(blocks, "r")
+        block_file_lines = block_file.readlines()
+        for line in range (0, len(block_file_lines)):
+            block_mat.append([])
+            num_list = block_file_lines[line].split(" ")
+            for num in num_list :
+                block_mat[line].append(int(num))
+        list_block_mat.append(block_mat)
+    return list_block_mat
+
+
 def main():
     print("Welcome to BoxFiller !")
     ##menu()
