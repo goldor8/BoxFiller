@@ -65,3 +65,9 @@ def select_block_position(play_grid, selected_block):
         return termilibDisplay.select_block_position(play_grid, selected_block)
     else:
         return terminalDisplay.select_block_position(play_grid, selected_block)
+
+def select_block_rotation(selected_block):
+    if use_termilib:
+        return termilibDisplay.select_block_rotation(selected_block)
+    else:
+        return terminalDisplay.select_block_rotation(selected_block)

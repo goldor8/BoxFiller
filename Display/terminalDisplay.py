@@ -1,8 +1,9 @@
 import string
 
+import block
 from Display.viewBufferUtil import *
 from main import parse_essential_commands
-from grid import is_in_grid, is_empty,can_emplace_block
+from grid import is_in_grid, is_empty, can_emplace_block
 
 
 def show_board(play_grid, blocks):
@@ -170,14 +171,39 @@ def select_block_position(play_grid, selected_block):
     def get_position_from_position_input(input):
         return ord(input[1]) - ord('A'), ord(input[0]) - ord('a')
 
-    block_position = get_input("Enter block position : ")
+    block_position = get_input("Enter block position: ")
     while not is_input_in_valid_format(block_position):
         print("Wrong format for block position ! Please enter a lowercase letter followed by an uppercase letter")
         block_position = get_input("Enter your choice : ")
 
     return get_position_from_position_input(block_position)
+
+
 def select_block(list_blocks):
     num_block = 0
-    while (num_block < 1) or (num_block > len(list_blocks)) :
-        num_block = int(input("Choose a block : "))
+    while (num_block < 1) or (num_block > len(list_blocks)):
+        num_block = int(get_input("Choose a block : "))
     return num_block - 1
+
+
+def select_block_rotation(selected_block):
+    show_current_block(selected_block)
+    input = get_input("Enter 'y' or 'n'/nothing to rotate or not the block: ")
+    while input != "" and input != "y" and input != "n":
+        print("Wrong format for rotation ! Please enter 'y' or 'n'/nothing (blank)")
+        input = get_input("Enter 'y' or 'n'/nothing (blank) to rotate or not the block: ")
+
+    if input == "y":
+        return select_block_rotation(block.rotate_block(selected_block))
+
+    return selected_block
+
+def show_current_block(block):
+    print("Current block : ")
+    for line in block:
+        for number in line:
+            if number == 1:
+                print(" ■ ", end="")
+            else:
+                print(" . ", end="")
+        print()

@@ -23,7 +23,7 @@ def random_blocks(stock_blocks) :
         a = random.randint(0, len(stock_blocks) - 1)
         b = random.randint(0, len(stock_blocks) - 1)
         c = random.randint(0, len(stock_blocks) - 1)
-    return stock_blocks[a], stock_blocks[b], stock_blocks[c]
+    return [stock_blocks[a], stock_blocks[b], stock_blocks[c]]
 
 def get_block_for_board_choice(choice) :
     grid_blocks = os.listdir("Level\Blocks\common")
@@ -87,6 +87,8 @@ def playLoop():
     show_board(play_grid, round_blocks)
 
     selected_block_index = select_block(round_blocks)
+
+    round_blocks[selected_block_index] = select_block_rotation(round_blocks[selected_block_index])
 
     position_x, position_y = select_block_position(play_grid, round_blocks[selected_block_index])
     while not can_emplace_block(play_grid, round_blocks[selected_block_index], position_x, position_y):
