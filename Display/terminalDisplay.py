@@ -2,7 +2,7 @@ import string
 
 from Display.viewBufferUtil import *
 from main import parse_essential_commands
-from grid import is_in_grid, is_empty
+from grid import is_in_grid, is_empty,can_emplace_block
 
 
 def show_board(play_grid, blocks):
@@ -163,16 +163,26 @@ def get_input(text):
     return str
 
 
-def select_block_position(play_grid):
+def select_block_position(play_grid, selected_block):
+    def is_input_in_valid_format(input):
+        return len(input) == 2 and input[0] in string.ascii_lowercase and input[1] in string.ascii_uppercase
+
+    def get_position_from_input(input):
+        return ord(input[1]) - ord('A'),ord(input[0]) - ord('a')
+
+    def is_valid_position(input_position):
+        position_x,position_y = get_position_from_input(input_position)
+        return is_in_grid(play_grid, position_y, position_x) and is_empty(play_grid, position_x, position_y) and can_emplace_block(play_grid, selected_block, position_x, position_y)
+
     print("Select block position in the format (aA) where first lowercase letter is the line and second uppercase letter the column : ")
     block_position = get_input("Enter your choice : ")
-    position_y = ord(block_position[0]) - ord('a')
-    position_x = ord(block_position[1]) - ord('A')
-    while len(block_position) != 2 or not is_in_grid(play_grid, position_y, position_x) or not is_empty(play_grid, position_x, position_y):
+    a = is_input_in_valid_format(block_position)
+    b = is_valid_position(block_position)
+    while not is_input_in_valid_format(block_position) or not is_valid_position(block_position):
         print("Invalid choice !")
         block_position = get_input("Enter your choice : ")
 
-    return position_x, position_y
+    return get_position_from_input(block_position)
 def select_block(list_blocks):
     num_block = 0
     while (num_block < 1) or (num_block > len(list_blocks)) :

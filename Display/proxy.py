@@ -60,8 +60,8 @@ def select_block(round_blocks):
         return terminalDisplay.select_block(round_blocks)
 
 
-def select_block_position(play_grid):
+def select_block_position(play_grid, selected_block):
     if use_termilib:
-        return termilibDisplay.select_block_position(play_grid)
+        return termilibDisplay.select_block_position(play_grid, selected_block)
     else:
-        return terminalDisplay.select_block_position(play_grid)
+        return terminalDisplay.select_block_position(play_grid, selected_block)

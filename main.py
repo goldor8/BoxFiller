@@ -1,8 +1,8 @@
 from Display.proxy import *
+from grid import *
 
 import random
 import os
-import grid
 import random
 
 play_grid = []
@@ -67,11 +67,11 @@ def init_game():
 
     global play_grid
     if gridType == 0:
-        play_grid = grid.create_circle_grid(gridSize)
+        play_grid = create_circle_grid(gridSize)
     elif gridType == 1:
-        play_grid = grid.create_triangle_grid(gridSize)
+        play_grid = create_triangle_grid(gridSize)
     elif gridType == 2:
-        play_grid = grid.create_lozenge_grid(gridSize)
+        play_grid = create_lozenge_grid(gridSize)
 
 
     playLoop()
@@ -82,9 +82,8 @@ def playLoop():
     round_blocks = random_blocks(stock_blocks)
     show_board(play_grid, round_blocks)
     block_selected_index = select_block(round_blocks)
-    position_x, position_y = select_block_position(play_grid)
-
-
+    position_x, position_y = select_block_position(play_grid, round_blocks[block_selected_index])
+    emplace_block(play_grid, round_blocks[block_selected_index], position_x, position_y)
     get_input("Press any key to continue")
     playLoop()
 

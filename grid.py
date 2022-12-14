@@ -61,6 +61,8 @@ def create_lozenge_grid(taille):
 def can_emplace_block(grid, block, x, y):
     for i in range(len(block)):
         for j in range(len(block[i])):
+            if not is_in_grid(grid, x + j, y - len(block) + 1 + i):
+                return False
             if grid[y - len(block) + 1 + i][x + j] == 2 and block[i][j] == 1:
                 return False
     return True
@@ -136,4 +138,5 @@ def is_in_grid(grid, x, y):
 
 
 def is_empty(grid, x, y):
-    return grid[y][x] == 1
+    b = grid[y][x] == 1
+    return b
