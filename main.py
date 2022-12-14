@@ -9,8 +9,9 @@ play_grid = []
 
 stock_blocks = [[[0, 0, 1], [0, 1, 1], [1, 1, 1]], [[0, 1, 0], [1, 1, 1], [0, 1, 0]],
               [[1, 1, 1], [1, 1, 1], [1, 1, 1]]] * 5
-
 round_blocks = []
+
+
 def random_blocks(stock_blocks) :
     a = 0
     b = 0
@@ -80,7 +81,10 @@ def playLoop():
     global round_blocks
     round_blocks = random_blocks(stock_blocks)
     show_board(play_grid, round_blocks)
-    choose_block(round_blocks)
+    block_selected_index = select_block(round_blocks)
+    position_x, position_y = select_block_position(play_grid)
+
+
     get_input("Press any key to continue")
     playLoop()
 
@@ -88,6 +92,7 @@ def playLoop():
 def compute_score(bloc_casse):
     score = bloc_casse ** 2
     return score
+
 
 def parse_essential_commands(str):
     str.lower()
@@ -99,8 +104,6 @@ def parse_essential_commands(str):
         return True
     return False
 
+
 if __name__ == "__main__":
     main()
-
-
-

@@ -53,8 +53,15 @@ def get_input_not_parsed(text):
         return terminalDisplay.get_input_not_parsed(text)
 
 
-def choose_block(round_blocks):
+def select_block(round_blocks):
     if use_termilib:
-        return termilibDisplay.choose_block(round_blocks)
+        return termilibDisplay.select_block(round_blocks)
     else:
-        return terminalDisplay.choose_block(round_blocks)
+        return terminalDisplay.select_block(round_blocks)
+
+
+def select_block_position(play_grid):
+    if use_termilib:
+        return termilibDisplay.select_block_position(play_grid)
+    else:
+        return terminalDisplay.select_block_position(play_grid)

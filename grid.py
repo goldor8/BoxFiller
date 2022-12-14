@@ -128,3 +128,11 @@ def check_for_full_row_or_column(grid):
     for x in range(len(grid[0])):
         if is_column_full(grid, x):
             empty_column(grid, x)
+
+
+def is_in_grid(grid, x, y):
+    return x >= 0 and x < len(grid[0]) and y >= 0 and y < len(grid)
+
+
+def is_empty(grid, x, y):
+    return grid[y][x] == 1
