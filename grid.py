@@ -58,17 +58,18 @@ def create_lozenge_grid(taille):
                 grid[k].append(0)
     return grid
 
-def can_emplace_block(grid, block, y, x):
+def can_emplace_block(grid, block, x, y):
     for i in range(len(block)):
         for j in range(len(block[i])):
-            if grid[y + i][x + j] == 2 and block[i][j] == 1:
+            if grid[y - len(block) + 1 + i][x + j] == 2 and block[i][j] == 1:
                 return False
     return True
 
 def emplace_block(grid, block, x, y):
     for i in range(len(block)):
         for j in range(len(block[i])):
-            grid[x + i][y + j] = block[i][j]
+            if block[i][j] == 1:
+                grid[y - len(block) + 1 + i][x + j] = 2
 
 
 def is_column_full(grid, x):

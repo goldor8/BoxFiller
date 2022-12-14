@@ -7,18 +7,41 @@ from main import parse_essential_commands
 def show_board(play_grid, blocks):
     x_pos = 5
     y_pos = 2
-    termilib.set_background_color(termilib.colors["bright_white"])
-    termilib.draw_column(x_pos, y_pos, len(play_grid) + 2, " ")
-    termilib.draw_column(x_pos + 1 + len(play_grid[0]) * 2 + 3, y_pos, len(play_grid) + 2, " ")
-    termilib.draw_rectangle(x_pos + 1, y_pos, len(play_grid[0]) * 2 + 3, len(play_grid) + 2, " ")
-    termilib.set_background_color(termilib.colors["black"])
+    clear_view(grid_view)
+    termilib.set_cursor_position(x_pos, y_pos)
+
+    # Add letter on top of each column
+    first_line = "    "
+    for i in range(len(play_grid[0])):
+        first_line += chr(65 + i) + "  "
+    termilib.write(first_line)
+
+    # Add fancy top border
+    top_border = "  ╔"
+    for i in range(len(play_grid[0])):
+        top_border += "═══"
+    top_border += "╗"
+    termilib.write_at(top_border)
+
+    # Draw line Add letter for each line and add fancy border
     for y in range(len(play_grid)):
-        for x in range(len(play_grid[y])):
-            termilib.set_cursor_position(x * 2 + y_pos + 5, y + 3)
+        add_to_view(chr(97 + y) + " ║", grid_view)  # Add letter for each line and fancy border
+        for x in range(len(play_grid[y])):  # Draw each cell
             if play_grid[y][x] == 1:
-                termilib.write(" -")
+                add_to_view(" . ", grid_view)
             elif play_grid[y][x] == 2:
-                termilib.write(" #")
+                add_to_view(" ■ ", grid_view)
+            elif play_grid[y][x] == 0:
+                add_to_view("   ", grid_view)
+        add_to_view("║", grid_view)  # Add fancy border
+        increment_view_line()
+
+    # Add fancy bottom border
+    add_to_view("  ╚", grid_view)
+    for i in range(len(play_grid[0])):
+        add_to_view("═══", grid_view)
+    add_to_view("╝", grid_view)
+    increment_view_line()
 
     termilib.compile_buffer()
     termilib.flush()
