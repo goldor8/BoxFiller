@@ -92,7 +92,12 @@ def playLoop():
 
     position_x, position_y = select_block_position(play_grid, round_blocks[selected_block_index])
     while not can_emplace_block(play_grid, round_blocks[selected_block_index], position_x, position_y):
-        remove_life()
+        global lives
+        lives -= 1
+        if lives == 0:
+            game_over()
+            return
+
         print("Invalid position ! You have " + str(lives) + " tries left")
         position_x, position_y = select_block_position(play_grid, round_blocks[selected_block_index])
 
@@ -107,12 +112,9 @@ def playLoop():
     playLoop()
 
 
-def remove_life():
-    global lives
-    lives -= 1
-    if lives == 0:
-        print("You lost !")
-        exit(0)
+def game_over():
+    show_game_over(score)
+    exit(0)
 
 
 def compute_score(broken_squares):

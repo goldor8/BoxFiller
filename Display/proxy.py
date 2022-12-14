@@ -71,3 +71,10 @@ def select_block_rotation(selected_block):
         return termilibDisplay.select_block_rotation(selected_block)
     else:
         return terminalDisplay.select_block_rotation(selected_block)
+
+
+def show_game_over(score):
+    if use_termilib:
+        termilibDisplay.show_game_over(score)
+    else:
+        terminalDisplay.show_game_over(score)

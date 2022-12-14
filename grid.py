@@ -148,3 +148,18 @@ def is_in_grid(grid, x, y):
 def is_empty(grid, x, y):
     b = grid[y][x] == 1
     return b
+
+def row_state(grid, i):
+    return is_row_full(grid, i)
+
+def col_state(grid, j):
+    return is_column_full(grid, j)
+
+def row_clear(grid, i):
+    empty_row(grid, i)
+
+def col_clear(grid, j):
+    empty_column(grid, j)
+
+def valid_position(grid, block, i, j):
+    return can_emplace_block(grid, block, i, j)

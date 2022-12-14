@@ -26,6 +26,19 @@ def show_board(play_grid, blocks):
             print("")
 
 
+def print_grid(grid):
+    grid_view = []
+    prepare_grid_view(grid)
+    for i in range(0, len(grid_view)):
+        print(grid_view[i])
+
+
+def print_blocks(blocks):
+    blocks_view = []
+    prepare_block_view(blocks, 30, 3, blocks_view)
+    for i in range(0, len(blocks_view)):
+        print(blocks_view[i])
+
 # Store the grid display in a list of string
 def prepare_grid_view(play_grid, grid_view):
     clear_view(grid_view)
@@ -207,3 +220,9 @@ def show_current_block(block):
             else:
                 print(" . ", end="")
         print()
+
+
+def show_game_over(score):
+    print("Game over !")
+    print("Your score is : " + str(score))
+    get_input("Press any key to continue")
