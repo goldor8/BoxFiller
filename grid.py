@@ -63,6 +63,8 @@ def can_emplace_block(grid, block, x, y):
         for j in range(len(block[i])):
             if not is_in_grid(grid, x + j, y - len(block) + 1 + i):
                 return False
+            if block[i][j] == 1 and not is_empty(grid, x + j, y - len(block) + 1 + i):
+                return False
             if grid[y - len(block) + 1 + i][x + j] == 2 and block[i][j] == 1:
                 return False
     return True
@@ -125,12 +127,18 @@ def fill_all_grid(grid):
                 grid[y][x] = 2
 
 def check_for_full_row_or_column(grid):
-    for y in range(len(grid)):
-        if is_row_full(grid, y):
+    broken_squares = 0
+    for y in range(len(grid) - 1, -1, -1):  # Reverse iteration to bring down all grid and not only the line up
+        while is_row_full(grid, y):  # fallen squares can fill the line
             empty_row(grid, y)
+            broken_squares += len(grid[y])
+            bring_cube_down_from_column_index(grid, y)
     for x in range(len(grid[0])):
         if is_column_full(grid, x):
             empty_column(grid, x)
+            broken_squares += len(grid)
+
+    return broken_squares
 
 
 def is_in_grid(grid, x, y):

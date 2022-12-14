@@ -11,6 +11,9 @@ stock_blocks = [[[0, 0, 1], [0, 1, 1], [1, 1, 1]], [[0, 1, 0], [1, 1, 1], [0, 1,
               [[1, 1, 1], [1, 1, 1], [1, 1, 1]]] * 5
 round_blocks = []
 
+lives = 3
+score = 0
+
 
 def random_blocks(stock_blocks) :
     a = 0
@@ -80,25 +83,46 @@ def init_game():
 def playLoop():
     global round_blocks
     round_blocks = random_blocks(stock_blocks)
+
     show_board(play_grid, round_blocks)
-    block_selected_index = select_block(round_blocks)
-    position_x, position_y = select_block_position(play_grid, round_blocks[block_selected_index])
-    emplace_block(play_grid, round_blocks[block_selected_index], position_x, position_y)
-    get_input("Press any key to continue")
+
+    selected_block_index = select_block(round_blocks)
+
+    position_x, position_y = select_block_position(play_grid, round_blocks[selected_block_index])
+    while not can_emplace_block(play_grid, round_blocks[selected_block_index], position_x, position_y):
+        remove_life()
+        print("Invalid position ! You have " + str(lives) + " tries left")
+        position_x, position_y = select_block_position(play_grid, round_blocks[selected_block_index])
+
+    emplace_block(play_grid, round_blocks[selected_block_index], position_x, position_y)
+
+    broken_cases = check_for_full_row_or_column(play_grid)
+
+    global score
+    score += compute_score(broken_cases)
+    print("Score : " + str(score))
+
     playLoop()
 
 
-def compute_score(bloc_casse):
-    score = bloc_casse ** 2
-    return score
+def remove_life():
+    global lives
+    lives -= 1
+    if lives == 0:
+        print("You lost !")
+        exit(0)
 
 
-def parse_essential_commands(str):
-    str.lower()
-    if str == "exit":
+def compute_score(broken_squares):
+    return broken_squares ** 2
+
+
+def parse_essential_commands(value):
+    value.lower()
+    if value == "exit":
         exit(0)
         return True
-    elif str == "help":
+    elif value == "help":
         print("help")
         return True
     return False

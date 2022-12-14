@@ -1,5 +1,5 @@
 ╔════════════════════════════════════════════════════════════════╗
-║		              ════Les Règles════                         ║
+║                    ════Les Règles════                          ║
 ║                                                                ║
 ║  ═Box Filler est un jeu avec une grille et des blocs.          ║
 ║  Il faut placer les blocs sur la grille et si une ligne        ║
@@ -7,14 +7,14 @@
 ║  votre score. Le but est d\'obtenir le meilleur score          ║
 ║  sans que la grille ne soit remplie.                           ║
 ║                                                                ║
-║	  		          ════Les Grilles════                        ║
+║                    ════Les Grilles════                         ║
 ║                                                                ║
 ║  ═Il existe 3 types de grilles dans Box Filler :               ║
-║	  -Losange                                                   ║
-║	  -Cercle                                                    ║
-║	  -Triangle                                                  ║
+║     -Losange                                                   ║
+║     -Cercle                                                    ║
+║     -Triangle                                                  ║
 ║                                                                ║
-║			          ════Les Blocs════                          ║
+║                     ════Les Blocs════                          ║
 ║                                                                ║
 ║  ═Il existe un certains nombres de blocs qui seront présents   ║
 ║  sur chacune des grilles, mais il y a aussi des blocs          ║

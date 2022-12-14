@@ -167,22 +167,15 @@ def select_block_position(play_grid, selected_block):
     def is_input_in_valid_format(input):
         return len(input) == 2 and input[0] in string.ascii_lowercase and input[1] in string.ascii_uppercase
 
-    def get_position_from_input(input):
-        return ord(input[1]) - ord('A'),ord(input[0]) - ord('a')
+    def get_position_from_position_input(input):
+        return ord(input[1]) - ord('A'), ord(input[0]) - ord('a')
 
-    def is_valid_position(input_position):
-        position_x,position_y = get_position_from_input(input_position)
-        return is_in_grid(play_grid, position_y, position_x) and is_empty(play_grid, position_x, position_y) and can_emplace_block(play_grid, selected_block, position_x, position_y)
-
-    print("Select block position in the format (aA) where first lowercase letter is the line and second uppercase letter the column : ")
-    block_position = get_input("Enter your choice : ")
-    a = is_input_in_valid_format(block_position)
-    b = is_valid_position(block_position)
-    while not is_input_in_valid_format(block_position) or not is_valid_position(block_position):
-        print("Invalid choice !")
+    block_position = get_input("Enter block position : ")
+    while not is_input_in_valid_format(block_position):
+        print("Wrong format for block position ! Please enter a lowercase letter followed by an uppercase letter")
         block_position = get_input("Enter your choice : ")
 
-    return get_position_from_input(block_position)
+    return get_position_from_position_input(block_position)
 def select_block(list_blocks):
     num_block = 0
     while (num_block < 1) or (num_block > len(list_blocks)) :
