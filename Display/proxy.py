@@ -1,7 +1,7 @@
 import Display.termilibDisplay as termilibDisplay
 import Display.terminalDisplay as terminalDisplay
 
-use_termilib = True
+use_termilib = False
 
 
 def show_board(play_grid, blocks):
@@ -51,3 +51,10 @@ def get_input_not_parsed(text):
         return termilibDisplay.get_input_not_parsed(text)
     else:
         return terminalDisplay.get_input_not_parsed(text)
+
+
+def choose_block(round_blocks):
+    if use_termilib:
+        return termilibDisplay.choose_block(round_blocks)
+    else:
+        return terminalDisplay.choose_block(round_blocks)

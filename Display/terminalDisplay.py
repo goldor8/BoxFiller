@@ -3,8 +3,6 @@ from main import parse_essential_commands
 
 
 def show_board(play_grid, blocks):
-    blocks = [[[0, 0, 1], [0, 1, 1], [1, 1, 1]], [[0, 1, 0], [1, 1, 1], [0, 1, 0]],
-              [[1, 1, 1], [1, 1, 1], [1, 1, 1]]] * 5
     grid_view, block_view = [], []
     prepare_block_view(blocks, 30, 3, block_view)
     prepare_grid_view(play_grid, grid_view)
@@ -160,3 +158,8 @@ def get_input(text):
     if parse_essential_commands(str):
         return get_input(text)
     return str
+def choose_block (list_blocks) :
+    num_block = 0
+    while (num_block < 1) or (num_block > len(list_blocks)) :
+        num_block = int(input("Choose a block : "))
+    return num_block - 1

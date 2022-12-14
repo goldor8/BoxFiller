@@ -7,9 +7,10 @@ import random
 
 play_grid = []
 
-stock_blocks = []
+stock_blocks = [[[0, 0, 1], [0, 1, 1], [1, 1, 1]], [[0, 1, 0], [1, 1, 1], [0, 1, 0]],
+              [[1, 1, 1], [1, 1, 1], [1, 1, 1]]] * 5
 
-
+round_blocks = []
 def random_blocks(stock_blocks) :
     a = 0
     b = 0
@@ -76,8 +77,10 @@ def init_game():
 
 
 def playLoop():
-    show_board(play_grid, stock_blocks)
-
+    global round_blocks
+    round_blocks = random_blocks(stock_blocks)
+    show_board(play_grid, round_blocks)
+    choose_block(round_blocks)
     get_input("Press any key to continue")
     playLoop()
 
@@ -98,3 +101,6 @@ def parse_essential_commands(str):
 
 if __name__ == "__main__":
     main()
+
+
+
