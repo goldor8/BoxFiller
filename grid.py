@@ -149,6 +149,12 @@ def is_empty(grid, x, y):
     b = grid[y][x] == 1
     return b
 
+def is_in_grid_and_valid(grid, x, y):
+    return is_in_grid(grid, x, y) and grid[y][x] > 0
+
+def is_in_grid_and_empty(grid, x, y):
+    return is_in_grid(grid, x, y) and is_empty(grid, x, y)
+
 def row_state(grid, i):
     return is_row_full(grid, i)
 

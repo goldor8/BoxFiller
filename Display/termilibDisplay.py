@@ -108,9 +108,9 @@ def select_grid_size():
         elif termilib.is_key_pressed("enter"):
             termilib.flush_keys()
             if grid_size == 0:
-                return 11
+                return 21
             elif grid_size == 1:
-                return 17
+                return 23
             elif grid_size == 2:
                 return 25
         if grid_size < 0:
