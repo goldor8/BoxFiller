@@ -16,7 +16,7 @@ def show_board(play_grid, blocks):
     termilib.set_cursor_position(x_pos, y_pos)
     first_line = "    "
     for i in range(len(play_grid[0])):
-        first_line += chr(65 + i) + "  "
+        first_line += chr(ord('a') + i) + "  "
     termilib.write(first_line)
 
     # Add fancy top border
@@ -30,14 +30,14 @@ def show_board(play_grid, blocks):
     # Draw line Add letter for each line and add fancy border
     for y in range(len(play_grid)):
         termilib.set_cursor_position(x_pos, y_pos + 2 + y)
-        line = chr(65 + y) + " ║"  # Add letter for each line and fancy border
+        line = chr(ord('A') + y) + " ║"  # Add letter for each line and fancy border
         for x in range(len(play_grid[y])):  # Draw each cell
             if play_grid[y][x] == 1:
                 line += " . "
             elif play_grid[y][x] == 2:
                 line += " ■ "
             elif play_grid[y][x] == 0:
-                line *= "   "
+                line += "   "
         line += "║"  # Add fancy border
         termilib.write(line)
 
@@ -56,7 +56,7 @@ def show_board(play_grid, blocks):
 def select_grid_type():
     grid_type = 0
     while True:
-        draw_selected_grid_type(grid_type)
+        draw_select_grid_type(grid_type)
         if termilib.is_key_pressed("left"):
             grid_type -= 1
         elif termilib.is_key_pressed("right"):
@@ -71,7 +71,7 @@ def select_grid_type():
         termilib.flush_keys()
 
 
-def draw_selected_grid_type(grid_type):
+def draw_select_grid_type(grid_type):
     termilib.set_cursor_position(40, 3)
     termilib.write("Selected grid type: ")
 

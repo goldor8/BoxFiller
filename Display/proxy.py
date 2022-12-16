@@ -3,7 +3,7 @@ import Display.terminalDisplay as terminalDisplay
 import Display.pygameDisplay as pygameDisplay
 
 use_termilib = False
-use_pygame = True
+use_pygame = False
 
 
 def show_board(play_grid, blocks):

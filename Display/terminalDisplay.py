@@ -179,10 +179,10 @@ def get_input(text):
 
 def select_block_position(play_grid, selected_block):
     def is_input_in_valid_format(input):
-        return len(input) == 2 and input[0] in string.ascii_lowercase and input[1] in string.ascii_uppercase
+        return len(input) == 2 and input[0] in string.ascii_uppercase and input[1] in string.ascii_lowercase
 
     def get_position_from_position_input(input):
-        return ord(input[1]) - ord('A'), ord(input[0]) - ord('a')
+        return ord(input[1]) - ord('a'), ord(input[0]) - ord('A')
 
     block_position = get_input("Enter block position: ")
     while not is_input_in_valid_format(block_position):
