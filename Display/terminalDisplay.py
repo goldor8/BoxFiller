@@ -47,7 +47,7 @@ def prepare_grid_view(play_grid, grid_view):
     # Add letter on top of each column
     add_to_view("    ", grid_view)
     for i in range(len(play_grid[0])):
-        add_to_view(chr(65 + i) + "  ", grid_view)
+        add_to_view(chr(97 + i) + "  ", grid_view)
     increment_view_line()
 
     # Add fancy top border
@@ -59,7 +59,7 @@ def prepare_grid_view(play_grid, grid_view):
 
     # Draw line Add letter for each line and add fancy border
     for y in range(len(play_grid)):
-        add_to_view(chr(97 + y) + " ║", grid_view)  # Add letter for each line and fancy border
+        add_to_view(chr(65 + y) + " ║", grid_view)  # Add letter for each line and fancy border
         for x in range(len(play_grid[y])):  # Draw each cell
             if play_grid[y][x] == 1:
                 add_to_view(" . ", grid_view)
@@ -134,9 +134,9 @@ def select_grid_type():
 
 
 def select_grid_size():
-    print("Select grid odd size between 21 and 43 : ")
+    print("Select grid odd size between 21 and 26 : ")
     gridSize = int(get_input("Enter your choice : "))
-    while gridSize not in range(21, 44) or gridSize % 2 == 0:
+    while gridSize not in range(21, 27) or gridSize % 2 == 0:
         print("Invalid choice !")
         gridSize = int(get_input("Enter your choice : "))
 
@@ -179,10 +179,10 @@ def get_input(text):
 
 def select_block_position(play_grid, selected_block):
     def is_input_in_valid_format(input):
-        return len(input) == 2 and input[0] in string.ascii_uppercase and input[1] in string.ascii_lowercase
+        return len(input) == 2 and input[1] in string.ascii_lowercase and input[0] in string.ascii_uppercase
 
     def get_position_from_position_input(input):
-        return ord(input[1]) - ord('a'), ord(input[0]) - ord('A')
+        return ord(input[0]) - ord('A'), ord(input[1]) - ord('a')
 
     block_position = get_input("Enter block position: ")
     while not is_input_in_valid_format(block_position):
