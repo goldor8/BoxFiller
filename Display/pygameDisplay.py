@@ -11,6 +11,8 @@ square_size = 20
 empty_square_slot = pygame.transform.scale(pygame.image.load('resources/sprites/square_slot_smooth_down.png'), (square_size, square_size))
 filled_square_slot = pygame.transform.scale(pygame.image.load('resources/sprites/square_slot_smooth_up.png'), (square_size, square_size))
 
+background_color = (251, 255, 159)
+secondary_color = (63, 149, 146)
 
 def is_mouse_on_rect(mouse_pos: pygame.Vector2, rect: pygame.Rect):
     return rect.collidepoint(mouse_pos)
@@ -73,14 +75,14 @@ def menu():
         elif is_mouse_on_rect(pygame.mouse.get_pos(), RulesRect):
             choice = 1
 
-        screen.fill((251, 255, 159))
+        screen.fill(background_color)
         screen.blit(TitleSurf, TitleRect)
 
         if choice == 0:
-            pygame.draw.rect(screen, (63, 149, 146), PlayRect)
+            pygame.draw.rect(screen, secondary_color, PlayRect)
 
         elif choice == 1:
-            pygame.draw.rect(screen, (63, 149, 146), RulesRect)
+            pygame.draw.rect(screen, secondary_color, RulesRect)
 
         screen.blit(PlaySurf, PlayRect)
         screen.blit(RulesSurf, RulesRect)
@@ -133,17 +135,17 @@ def select_grid_type():
         elif is_mouse_on_rect(pygame.mouse.get_pos(), LozengeRect):
             choice = 2
 
-        screen.fill((251, 255, 159))
+        screen.fill(background_color)
         screen.blit(TitleSurf, TitleRect)
 
         if choice == 0:
-            pygame.draw.rect(screen, (63, 149, 146), CircleRect)
+            pygame.draw.rect(screen, secondary_color, CircleRect)
 
         elif choice == 1:
-            pygame.draw.rect(screen, (63, 149, 146), TriangleRect)
+            pygame.draw.rect(screen, secondary_color, TriangleRect)
 
         elif choice == 2:
-            pygame.draw.rect(screen, (63, 149, 146), LozengeRect)
+            pygame.draw.rect(screen, secondary_color, LozengeRect)
 
         screen.blit(CircleSurf, CircleRect)
         screen.blit(TriangleSurf, TriangleRect)
@@ -207,17 +209,17 @@ def select_grid_size():
         elif is_mouse_on_rect(pygame.mouse.get_pos(), LargeRect):
             choice = 2
 
-        screen.fill((251, 255, 159))
+        screen.fill(background_color)
         screen.blit(TitleSurf, TitleRect)
 
         if choice == 0:
-            pygame.draw.rect(screen, (63, 149, 146), SmallRect)
+            pygame.draw.rect(screen, secondary_color, SmallRect)
 
         elif choice == 1:
-            pygame.draw.rect(screen, (63, 149, 146), MediumRect)
+            pygame.draw.rect(screen, secondary_color, MediumRect)
 
         elif choice == 2:
-            pygame.draw.rect(screen, (63, 149, 146), LargeRect)
+            pygame.draw.rect(screen, secondary_color, LargeRect)
 
         screen.blit(SmallSurf, SmallRect)
         screen.blit(MediumSurf, MediumRect)
@@ -231,7 +233,7 @@ def draw_grid(play_grid, offset_x, offset_y):
             if play_grid[y][x] == 1:
                 screen.blit(empty_square_slot, (x * 20 + offset_x, y * 20 + offset_y))
             elif play_grid[y][x] == 2:
-                screen.blit(color_sprite(filled_square_slot, (60, 200, 140)), (x * 20 + offset_x, y * 20 + offset_y))
+                screen.blit(color_sprite(filled_square_slot, secondary_color), (x * 20 + offset_x, y * 20 + offset_y))
 
 
 def draw_available_blocks(available_blocks, offset_x, offset_y, horizontal_space, exclude_index):
@@ -260,7 +262,7 @@ def draw_block(block, offset_x, offset_y):
             number = line[numberIndex]
 
             if number == 1:
-                screen.blit(empty_square_slot, (offset_x + numberIndex * square_size, offset_y + lineIndex * square_size))
+                screen.blit(color_sprite(empty_square_slot, secondary_color), (offset_x + numberIndex * square_size, offset_y + lineIndex * square_size))
 
 selected_block = None
 block_position = None
@@ -312,7 +314,7 @@ def show_board(play_grid, blocks):
 
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
-        screen.fill((251, 255, 159))
+        screen.fill(background_color)
 
         draw_grid(play_grid, grid_x_offset, grid_y_offset)
         draw_available_blocks(blocks, 60 + len(play_grid[0] * square_size), 30, 400, selected_block)
