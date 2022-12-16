@@ -388,7 +388,7 @@ def show_game_over(score):
                 pygame.quit()
                 exit(0)
 
-        screen.fill((251, 255, 159))
+        screen.fill(background_color)
 
         text = title_font.render("Game Over", True, text_color)
         screen.blit(text, text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 - 100)))

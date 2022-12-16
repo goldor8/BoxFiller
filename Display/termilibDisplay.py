@@ -10,15 +10,17 @@ def show_board(play_grid, blocks):
     x_pos = 5
     y_pos = 2
     clear_view(grid_view)
-    termilib.set_cursor_position(x_pos, y_pos)
+
 
     # Add letter on top of each column
+    termilib.set_cursor_position(x_pos, y_pos)
     first_line = "    "
     for i in range(len(play_grid[0])):
         first_line += chr(65 + i) + "  "
     termilib.write(first_line)
 
     # Add fancy top border
+    termilib.set_cursor_position(x_pos, y_pos + 1)
     top_border = "  ╔"
     for i in range(len(play_grid[0])):
         top_border += "═══"
@@ -27,23 +29,25 @@ def show_board(play_grid, blocks):
 
     # Draw line Add letter for each line and add fancy border
     for y in range(len(play_grid)):
-        add_to_view(chr(97 + y) + " ║", grid_view)  # Add letter for each line and fancy border
+        termilib.set_cursor_position(x_pos, y_pos + 2 + y)
+        line = chr(65 + y) + " ║"  # Add letter for each line and fancy border
         for x in range(len(play_grid[y])):  # Draw each cell
             if play_grid[y][x] == 1:
-                add_to_view(" . ", grid_view)
+                line += " . "
             elif play_grid[y][x] == 2:
-                add_to_view(" ■ ", grid_view)
+                line += " ■ "
             elif play_grid[y][x] == 0:
-                add_to_view("   ", grid_view)
-        add_to_view("║", grid_view)  # Add fancy border
-        increment_view_line()
+                line *= "   "
+        line += "║"  # Add fancy border
+        termilib.write(line)
 
-    # Add fancy bottom border
-    add_to_view("  ╚", grid_view)
+    # Add fancy bottom border$
+    termilib.set_cursor_position(x_pos, y_pos + 2 + len(play_grid))
+    bottom_border = "  ╚"
     for i in range(len(play_grid[0])):
-        add_to_view("═══", grid_view)
-    add_to_view("╝", grid_view)
-    increment_view_line()
+        bottom_border += "═══"
+    bottom_border += "╝"
+    termilib.write(bottom_border)
 
     termilib.compile_buffer()
     termilib.flush()
