@@ -2,9 +2,11 @@ import time
 
 from Display import termilib
 from main import parse_essential_commands
+from Display.viewBufferUtil import *
 
 
 def show_board(play_grid, blocks):
+    grid_view = []
     x_pos = 5
     y_pos = 2
     clear_view(grid_view)
@@ -21,7 +23,7 @@ def show_board(play_grid, blocks):
     for i in range(len(play_grid[0])):
         top_border += "═══"
     top_border += "╗"
-    termilib.write_at(top_border)
+    termilib.write(top_border)
 
     # Draw line Add letter for each line and add fancy border
     for y in range(len(play_grid)):

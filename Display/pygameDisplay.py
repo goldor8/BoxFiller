@@ -8,8 +8,12 @@ title_font = None
 large_font = None
 screen = None
 square_size = 20
-square_slot = pygame.transform.scale(pygame.image.load('resources/sprites/square_slot_smooth_down.png'), (square_size, square_size))
+empty_square_slot = pygame.transform.scale(pygame.image.load('resources/sprites/square_slot_smooth_down.png'), (square_size, square_size))
+filled_square_slot = pygame.transform.scale(pygame.image.load('resources/sprites/square_slot_smooth_up.png'), (square_size, square_size))
 
+
+def is_mouse_on_rect(mouse_pos: pygame.Vector2, rect: pygame.Rect):
+    return rect.collidepoint(mouse_pos)
 
 def color_sprite(sprite, color):
     surface = pygame.Surface(sprite.get_size())
@@ -56,10 +60,18 @@ def menu():
                     choice += 1
                 elif event.key == pygame.K_RETURN:
                     return choice
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    return choice
         if choice < 0:
             choice = 1
         elif choice > 1:
             choice = 0
+
+        if is_mouse_on_rect(pygame.mouse.get_pos(), PlayRect):
+            choice = 0
+        elif is_mouse_on_rect(pygame.mouse.get_pos(), RulesRect):
+            choice = 1
 
         screen.fill((251, 255, 159))
         screen.blit(TitleSurf, TitleRect)
@@ -106,10 +118,20 @@ def select_grid_type():
                     choice += 1
                 elif event.key == pygame.K_RETURN:
                     return choice
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    return choice
         if choice < 0:
             choice = 2
         elif choice > 2:
             choice = 0
+
+        if is_mouse_on_rect(pygame.mouse.get_pos(), CircleRect):
+            choice = 0
+        elif is_mouse_on_rect(pygame.mouse.get_pos(), TriangleRect):
+            choice = 1
+        elif is_mouse_on_rect(pygame.mouse.get_pos(), LozengeRect):
+            choice = 2
 
         screen.fill((251, 255, 159))
         screen.blit(TitleSurf, TitleRect)
@@ -165,10 +187,25 @@ def select_grid_size():
                         return 23
                     elif choice == 2:
                         return 25
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    if choice == 0:
+                        return 21
+                    elif choice == 1:
+                        return 23
+                    elif choice == 2:
+                        return 25
         if choice < 0:
             choice = 2
         elif choice > 2:
             choice = 0
+
+        if is_mouse_on_rect(pygame.mouse.get_pos(), SmallRect):
+            choice = 0
+        elif is_mouse_on_rect(pygame.mouse.get_pos(), MediumRect):
+            choice = 1
+        elif is_mouse_on_rect(pygame.mouse.get_pos(), LargeRect):
+            choice = 2
 
         screen.fill((251, 255, 159))
         screen.blit(TitleSurf, TitleRect)
@@ -192,9 +229,9 @@ def draw_grid(play_grid, offset_x, offset_y):
     for y in range(0, len(play_grid)):
         for x in range(0, len(play_grid[y])):
             if play_grid[y][x] == 1:
-                screen.blit(square_slot, (x * 20 + offset_x, y * 20 + offset_y))
+                screen.blit(empty_square_slot, (x * 20 + offset_x, y * 20 + offset_y))
             elif play_grid[y][x] == 2:
-                screen.blit(color_sprite(square_slot, (42, 174, 105)), (x * 20 + offset_x, y * 20 + offset_y))
+                screen.blit(color_sprite(filled_square_slot, (60, 200, 140)), (x * 20 + offset_x, y * 20 + offset_y))
 
 
 def draw_available_blocks(available_blocks, offset_x, offset_y, horizontal_space, exclude_index):
@@ -223,14 +260,14 @@ def draw_block(block, offset_x, offset_y):
             number = line[numberIndex]
 
             if number == 1:
-                screen.blit(square_slot, (offset_x + numberIndex * square_size, offset_y + lineIndex * square_size))
+                screen.blit(empty_square_slot, (offset_x + numberIndex * square_size, offset_y + lineIndex * square_size))
 
 selected_block = None
 block_position = None
 def show_board(play_grid, blocks):
     global screen
     global large_font
-    global square_slot
+    global empty_square_slot
 
     grid_x_offset = 30
     grid_y_offset = 30
@@ -255,9 +292,9 @@ def show_board(play_grid, blocks):
                     if selected_block != -1:
                         mouse_x, mouse_y = event.pos
                         global block_position
-                        grid_coord = get_grid_coord_mouse_on(play_grid, mouse_x - grab_x_offset, mouse_y - grab_y_offset + (len(blocks[selected_block]) - 1) * square_size, grid_x_offset, grid_y_offset)
+                        grid_coord = get_grid_rounded_coord_mouse_on(play_grid, mouse_x - grab_x_offset, mouse_y - grab_y_offset + (len(blocks[selected_block]) - 1) * square_size, grid_x_offset, grid_y_offset)
                         print(grid_coord)
-                        if grid.is_in_grid_and_valid(play_grid, grid_coord[0], grid_coord[1]):
+                        if grid.is_in_grid(play_grid, grid_coord[0], grid_coord[1]):
                             block_position = grid_coord
                             return
                         else:
@@ -307,9 +344,18 @@ def get_block_index_mouse_on(mouse_x, mouse_y, blocks, offset_x, offset_y, horiz
     return -1,0,0
 
 
-def get_grid_coord_mouse_on(play_grid, mouse_x, mouse_y, offset_x, offset_y):
+def get_grid_rounded_coord_mouse_on(play_grid, mouse_x, mouse_y, offset_x, offset_y):
     x = round((mouse_x - offset_x) / square_size)
     y = round((mouse_y - offset_y) / square_size)
+    if x >= 0 and x < len(play_grid[0]) and y >= 0 and y < len(play_grid):
+        return x, y
+    else:
+        return -1, -1
+
+
+def get_grid_coord_mouse_on(play_grid, mouse_x, mouse_y, offset_x, offset_y):
+    x = int((mouse_x - offset_x) / square_size)
+    y = int((mouse_y - offset_y) / square_size)
     if x >= 0 and x < len(play_grid[0]) and y >= 0 and y < len(play_grid):
         return x, y
     else:
@@ -341,10 +387,10 @@ def show_game_over(score):
 
         screen.fill((251, 255, 159))
 
-        text = large_font.render("Game Over", True, (0, 0, 0))
-        screen.blit(text, (300, 300))
+        text = title_font.render("Game Over", True, (0, 0, 0))
+        screen.blit(text, text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 + 100)))
 
         text = large_font.render("Score: " + str(score), True, (0, 0, 0))
-        screen.blit(text, (300, 400))
+        screen.blit(text, text.get_rect(center=(400, 400)))
 
         pygame.display.flip()

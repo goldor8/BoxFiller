@@ -103,10 +103,10 @@ def playLoop():
 
     emplace_block(play_grid, round_blocks[selected_block_index], position_x, position_y)
 
-    broken_cases = check_for_full_row_or_column(play_grid)
+    broken_squares = check_for_full_row_or_column(play_grid)
 
     global score
-    score += compute_score(broken_cases)
+    score += compute_score(broken_squares)
     print("Score : " + str(score))
 
     playLoop()

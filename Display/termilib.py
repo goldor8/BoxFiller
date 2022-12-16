@@ -58,6 +58,7 @@ def vertical_write_at(x, y, text):
 
 def write(text):
     write_at(position_x, position_y, text)
+    move_cursor_at(position_x + len(text), position_y)
 
 
 def clear_screen():

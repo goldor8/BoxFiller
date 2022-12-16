@@ -128,8 +128,8 @@ def fill_all_grid(grid):
 
 def check_for_full_row_or_column(grid):
     broken_squares = 0
-    for y in range(len(grid) - 1, -1, -1):  # Reverse iteration to bring down all grid and not only the line up
-        while is_row_full(grid, y):  # fallen squares can fill the line
+    for y in range(0, len(grid)):
+        if is_row_full(grid, y):  # fallen squares can fill the line
             empty_row(grid, y)
             broken_squares += len(grid[y])
             bring_cube_down_from_column_index(grid, y)
@@ -148,9 +148,6 @@ def is_in_grid(grid, x, y):
 def is_empty(grid, x, y):
     b = grid[y][x] == 1
     return b
-
-def is_in_grid_and_valid(grid, x, y):
-    return is_in_grid(grid, x, y) and grid[y][x] > 0
 
 def is_in_grid_and_empty(grid, x, y):
     return is_in_grid(grid, x, y) and is_empty(grid, x, y)
