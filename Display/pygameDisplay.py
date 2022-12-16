@@ -13,6 +13,7 @@ filled_square_slot = pygame.transform.scale(pygame.image.load('resources/sprites
 
 background_color = (251, 255, 159)
 secondary_color = (63, 149, 146)
+text_color = (255,255,255)
 
 def is_mouse_on_rect(mouse_pos: pygame.Vector2, rect: pygame.Rect):
     return rect.collidepoint(mouse_pos)
@@ -38,13 +39,13 @@ def menu():
     init_display()
     global screen
     global large_font
-    TitleSurf = title_font.render('Menu', True, (0, 0, 0))
+    TitleSurf = title_font.render('Menu', True, text_color)
     TitleRect = TitleSurf.get_rect()
     TitleRect.center = (400, 100)
-    PlaySurf = large_font.render('Play', True, (0, 0, 0))
+    PlaySurf = large_font.render('Play', True, text_color)
     PlayRect = PlaySurf.get_rect()
     PlayRect.center = (400, 300)
-    RulesSurf = large_font.render('Rules', True, (0, 0, 0))
+    RulesSurf = large_font.render('Rules', True, text_color)
     RulesRect = RulesSurf.get_rect()
     RulesRect.center = (400, 400)
 
@@ -93,16 +94,16 @@ def menu():
 def select_grid_type():
     global screen
     global large_font
-    TitleSurf = title_font.render('Select Grid Type', True, (0, 0, 0))
+    TitleSurf = title_font.render('Select Grid Type', True, text_color)
     TitleRect = TitleSurf.get_rect()
     TitleRect.center = (400, 100)
-    CircleSurf = large_font.render('Circle', True, (0, 0, 0))
+    CircleSurf = large_font.render('Circle', True, text_color)
     CircleRect = CircleSurf.get_rect()
     CircleRect.center = (200, 300)
-    TriangleSurf = large_font.render('Triangle', True, (0, 0, 0))
+    TriangleSurf = large_font.render('Triangle', True, text_color)
     TriangleRect = TriangleSurf.get_rect()
     TriangleRect.center = (400, 300)
-    LozengeSurf = large_font.render('Lozenge', True, (0, 0, 0))
+    LozengeSurf = large_font.render('Lozenge', True, text_color)
     LozengeRect = LozengeSurf.get_rect()
     LozengeRect.center = (600, 300)
 
@@ -157,16 +158,16 @@ def select_grid_type():
 def select_grid_size():
     global screen
     global large_font
-    TitleSurf = title_font.render('Select Grid Size', True, (0, 0, 0))
+    TitleSurf = title_font.render('Select Grid Size', True, text_color)
     TitleRect = TitleSurf.get_rect()
     TitleRect.center = (400, 100)
-    SmallSurf = large_font.render('Small', True, (0, 0, 0))
+    SmallSurf = large_font.render('Small', True, text_color)
     SmallRect = SmallSurf.get_rect()
     SmallRect.center = (200, 300)
-    MediumSurf = large_font.render('Medium', True, (0, 0, 0))
+    MediumSurf = large_font.render('Medium', True, text_color)
     MediumRect = MediumSurf.get_rect()
     MediumRect.center = (400, 300)
-    LargeSurf = large_font.render('Large', True, (0, 0, 0))
+    LargeSurf = large_font.render('Large', True, text_color)
     LargeRect = LargeSurf.get_rect()
     LargeRect.center = (600, 300)
 
@@ -389,10 +390,10 @@ def show_game_over(score):
 
         screen.fill((251, 255, 159))
 
-        text = title_font.render("Game Over", True, (0, 0, 0))
-        screen.blit(text, text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 + 100)))
+        text = title_font.render("Game Over", True, text_color)
+        screen.blit(text, text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 - 100)))
 
-        text = large_font.render("Score: " + str(score), True, (0, 0, 0))
+        text = large_font.render("Score: " + str(score), True, text_color)
         screen.blit(text, text.get_rect(center=(400, 400)))
 
         pygame.display.flip()
