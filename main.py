@@ -1,5 +1,6 @@
 from Display.proxy import *
 from grid import *
+from block import *
 
 import random
 import os
@@ -36,19 +37,11 @@ def get_block_for_board_choice(choice) :
     return grid_blocks
 
 
-def get_blocks_from_files(grid_blocks):
-    list_block_mat = []
-    for blocks in grid_blocks:
-        block_mat = []
-        block_file = open(blocks, "r")
-        block_file_lines = block_file.readlines()
-        for line in range (0, len(block_file_lines)):
-            block_mat.append([])
-            num_list = block_file_lines[line].split(" ")
-            for num in num_list :
-                block_mat[line].append(int(num))
-        list_block_mat.append(block_mat)
-    return list_block_mat
+def get_blocks_from_files(blocks_path):
+    block_list = []
+    for block_path in blocks_path:
+        block_list.append(load_block(block_path))
+    return block_list
 
 
 def main():
