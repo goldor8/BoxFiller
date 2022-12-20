@@ -11,9 +11,9 @@ square_size = 20
 empty_square_slot = pygame.transform.scale(pygame.image.load('resources/sprites/square_slot_smooth_down.png'), (square_size, square_size))
 filled_square_slot = pygame.transform.scale(pygame.image.load('resources/sprites/square_slot_smooth_up.png'), (square_size, square_size))
 
-background_color = (251, 255, 159)
-secondary_color = (63, 149, 146)
-text_color = (255,255,255)
+background_color = (0, 0, 0)
+secondary_color = (255, 0, 0)
+text_color = (255, 255, 255)
 
 def is_mouse_on_rect(mouse_pos: pygame.Vector2, rect: pygame.Rect):
     return rect.collidepoint(mouse_pos)
