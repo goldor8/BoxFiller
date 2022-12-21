@@ -1,5 +1,8 @@
+# library to use the terminal
+
 import os
 import msvcrt
+import sys
 import threading
 import time
 
@@ -20,7 +23,6 @@ def set_terminal_size(cols, rows):
     global buffer
     for i in range(rows):
         buffer.append(["{}{} ".format(fg_color, bg_color)] * (cols))
-    os.system('mode con: cols={} lines={}'.format(cols, rows))
     global size_x
     global size_y
     size_y = rows
@@ -89,7 +91,8 @@ def render():
     lines = []
     for i in range(len(buffer)):
         lines.append("".join(buffer[i]))
-    print("\n".join(lines), end="")
+    sys.stdout.write("\r".join(lines))
+    sys.stdout.flush()
 
 
 def clear_buffer():

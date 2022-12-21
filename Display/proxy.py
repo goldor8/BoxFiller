@@ -1,12 +1,17 @@
-import Display.termilibDisplay as termilibDisplay
-import Display.terminalDisplay as terminalDisplay
-import Display.pygameDisplay as pygameDisplay
+# proxy used to redirect the calls to the right display
 
 use_termilib = False
 use_pygame = False
 
+if use_termilib:
+    import Display.termilibDisplay as termilibDisplay
+elif use_pygame:
+    import Display.pygameDisplay as pygameDisplay
+else:
+    import Display.terminalDisplay as terminalDisplay
 
-def show_board(play_grid, blocks):
+
+def show_board(play_grid, blocks):  # show the main information of the game
     if use_termilib:
         termilibDisplay.show_board(play_grid, blocks)
     elif use_pygame:
@@ -15,7 +20,7 @@ def show_board(play_grid, blocks):
         terminalDisplay.show_board(play_grid, blocks)
 
 
-def select_grid_type():
+def select_grid_type():  # ask user to select a grid type
     if use_termilib:
         return termilibDisplay.select_grid_type()
     elif use_pygame:
@@ -24,7 +29,7 @@ def select_grid_type():
         return terminalDisplay.select_grid_type()
 
 
-def select_grid_size():
+def select_grid_size():  # ask user to select a grid size
     if use_termilib:
         return termilibDisplay.select_grid_size()
     elif use_pygame:
@@ -33,7 +38,7 @@ def select_grid_size():
         return terminalDisplay.select_grid_size()
 
 
-def menu():
+def menu():  # show the user a menu and ask to choose play or show rules option
     if use_termilib:
         return termilibDisplay.menu()
     elif use_pygame:
@@ -42,7 +47,7 @@ def menu():
         return terminalDisplay.menu()
 
 
-def show_rules():
+def show_rules():  # show rules to the user
     if use_termilib:
         termilibDisplay.show_rules()
     elif use_pygame:
@@ -51,16 +56,7 @@ def show_rules():
         terminalDisplay.show_rules()
 
 
-def get_input(text):
-    if use_termilib:
-        return termilibDisplay.get_input(text)
-    elif use_pygame:
-        return pygameDisplay.get_input(text)
-    else:
-        return terminalDisplay.get_input(text)
-
-
-def get_input_not_parsed(text):
+def get_input_not_parsed(text):  # get input from different display system
     if use_termilib:
         return termilibDisplay.get_input_not_parsed(text)
     elif use_pygame:
@@ -69,7 +65,7 @@ def get_input_not_parsed(text):
         return terminalDisplay.get_input_not_parsed(text)
 
 
-def select_block(round_blocks):
+def select_block(round_blocks):  # ask user to select a block
     if use_termilib:
         return termilibDisplay.select_block(round_blocks)
     elif use_pygame:
@@ -78,7 +74,7 @@ def select_block(round_blocks):
         return terminalDisplay.select_block(round_blocks)
 
 
-def select_block_position(play_grid, selected_block):
+def select_block_position(play_grid, selected_block):  # ask user to select a block position
     if use_termilib:
         return termilibDisplay.select_block_position(play_grid, selected_block)
     elif use_pygame:
@@ -86,7 +82,8 @@ def select_block_position(play_grid, selected_block):
     else:
         return terminalDisplay.select_block_position(play_grid, selected_block)
 
-def select_block_rotation(selected_block):
+
+def select_block_rotation(selected_block):  # ask user for a rotation
     if use_termilib:
         return termilibDisplay.select_block_rotation(selected_block)
     elif use_pygame:
@@ -95,7 +92,7 @@ def select_block_rotation(selected_block):
         return terminalDisplay.select_block_rotation(selected_block)
 
 
-def show_game_over(score):
+def show_game_over(score):  # show game over screen
     if use_termilib:
         termilibDisplay.show_game_over(score)
     elif use_pygame:

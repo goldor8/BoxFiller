@@ -1,9 +1,9 @@
-import string
+# display module for basic terminal
 
+import string
 import block
 from Display.viewBufferUtil import *
-from main import parse_essential_commands
-from grid import is_in_grid, is_empty, can_emplace_block
+from main import get_input
 
 
 def show_board(play_grid, blocks):
@@ -11,24 +11,24 @@ def show_board(play_grid, blocks):
     prepare_block_view(blocks, 30, 3, block_view)
     prepare_grid_view(play_grid, grid_view)
 
-    maxColumn = len(grid_view)
-    if len(block_view) > maxColumn:
-        maxColumn = len(block_view)
+    max_column = len(grid_view)
+    if len(block_view) > max_column:
+        max_column = len(block_view)
 
-    for i in range(0, maxColumn):
-        if (i < len(grid_view)):
+    for i in range(0, max_column):
+        if i < len(grid_view):
             print(grid_view[i], end="")
         else:
             print(" " * len(grid_view[0]), end="")
-        if (i < len(block_view)):
+        if i < len(block_view):
             print(block_view[i])
         else:
             print("")
 
 
-def print_grid(grid):
+def print_grid(play_grid):
     grid_view = []
-    prepare_grid_view(grid)
+    prepare_grid_view(play_grid, grid_view)
     for i in range(0, len(grid_view)):
         print(grid_view[i])
 
@@ -39,8 +39,8 @@ def print_blocks(blocks):
     for i in range(0, len(blocks_view)):
         print(blocks_view[i])
 
-# Store the grid display in a list of string
-def prepare_grid_view(play_grid, grid_view):
+
+def prepare_grid_view(play_grid, grid_view):  # Store the grid display in a list of string
     clear_view(grid_view)
     set_line_view(0)
 
@@ -113,10 +113,10 @@ def prepare_block_view(blocks, max_lenght, block_size, block_view):
             increment_view_line()
 
         # add block number under the block
-        blockNumberText = str(blockIndex + 1)
-        beforeSpace = int((block_size * 3 - len(blockNumberText)) / 2) + 1
-        afterSpace = block_size * 3 - len(blockNumberText) - beforeSpace + 1
-        add_to_view(" " * beforeSpace + blockNumberText + afterSpace * " " + " ", block_view)
+        block_number_text = str(blockIndex + 1)
+        before_space = int((block_size * 3 - len(block_number_text)) / 2) + 1
+        after_space = block_size * 3 - len(block_number_text) - before_space + 1
+        add_to_view(" " * before_space + block_number_text + after_space * " " + " ", block_view)
 
 
 def select_grid_type():
@@ -125,22 +125,22 @@ def select_grid_type():
     print("2. Triangle")
     print("3. Lozenge")
 
-    gridType = get_input("Enter your choice : ")
-    while gridType not in ["1", "2", "3"]:
+    grid_type = get_input("Enter your choice : ")
+    while grid_type not in ["1", "2", "3"]:
         print("Invalid choice !")
-        gridType = get_input("Enter your choice : ")
+        grid_type = get_input("Enter your choice : ")
 
-    return int(gridType) - 1
+    return int(grid_type) - 1
 
 
 def select_grid_size():
     print("Select grid odd size between 21 and 25 : ")
-    gridSize = int(get_input("Enter your choice : "))
-    while gridSize not in range(21, 27) or gridSize % 2 == 0:
+    grid_size = int(get_input("Enter your choice : "))
+    while grid_size not in range(21, 27) or grid_size % 2 == 0:
         print("Invalid choice !")
-        gridSize = int(get_input("Enter your choice : "))
+        grid_size = int(get_input("Enter your choice : "))
 
-    return gridSize
+    return grid_size
 
 
 def menu():
@@ -157,11 +157,11 @@ def menu():
 
 
 def show_rules():
-    regles = open("Regles.txt", "r", encoding="utf-8")
-    regle = regles.readlines()
-    for ligne in regle:
-        print(ligne, end="")
-    regles.close()
+    rules = open("Regles.txt", "r", encoding="utf-8")
+    rules_lines = rules.readlines()
+    for line in rules_lines:
+        print(line, end="")
+    rules.close()
     print()
     get_input_not_parsed("Press any key to continue")
 
@@ -170,19 +170,12 @@ def get_input_not_parsed(text="Press any key to continue"):
     return input(text)
 
 
-def get_input(text):
-    str = get_input_not_parsed(text)
-    if parse_essential_commands(str):
-        return get_input(text)
-    return str
-
-
 def select_block_position(play_grid, selected_block):
-    def is_input_in_valid_format(input):
-        return len(input) == 2 and input[0] in string.ascii_uppercase and input[1] in string.ascii_lowercase
+    def is_input_in_valid_format(input_text):
+        return len(input_text) == 2 and input_text[0] in string.ascii_uppercase and input_text[1] in string.ascii_lowercase
 
-    def get_position_from_position_input(input):
-        return ord(input[1]) - ord('a'), ord(input[0]) - ord('A')
+    def get_position_from_position_input(input_text):
+        return ord(input_text[1]) - ord('a'), ord(input_text[0]) - ord('A')
 
     block_position = get_input("Enter block position: ")
     while not is_input_in_valid_format(block_position):
@@ -201,15 +194,16 @@ def select_block(list_blocks):
 
 def select_block_rotation(selected_block):
     show_current_block(selected_block)
-    input = get_input("Enter 'y' or 'n'/nothing to rotate or not the block: ")
-    while input != "" and input != "y" and input != "n":
+    input_text = get_input("Enter 'y' or 'n'/nothing to rotate or not the block: ")
+    while input_text != "" and input_text != "y" and input_text != "n":
         print("Wrong format for rotation ! Please enter 'y' or 'n'/nothing (blank)")
-        input = get_input("Enter 'y' or 'n'/nothing (blank) to rotate or not the block: ")
+        input_text = get_input("Enter 'y' or 'n'/nothing (blank) to rotate or not the block: ")
 
-    if input == "y":
+    if input_text == "y":
         return select_block_rotation(block.rotate_block(selected_block))
 
     return selected_block
+
 
 def show_current_block(block):
     print("Current block : ")

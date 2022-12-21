@@ -1,43 +1,44 @@
+import Display.proxy
 from Display.proxy import *
 from grid import *
 from block import *
 
-import random
 import os
 import random
 
-play_grid = []
+play_grid = []  # represents the grid on which the player is playing
 
 stock_blocks = [[[0, 0, 1], [0, 1, 1], [1, 1, 1]], [[0, 1, 0], [1, 1, 1], [0, 1, 0]],
-              [[1, 1, 1], [1, 1, 1], [1, 1, 1]]] * 5
-round_blocks = []
+                [[1, 1, 1], [1, 1, 1], [1, 1, 1]]] * 5
+round_blocks = []  # blocks that will be used after the board shape has been chosen
 
 lives = 3
 score = 0
 
 
-def random_blocks(stock_blocks) :
+def random_blocks(block_list):  # returns a list of 3 random blocks
     a = 0
     b = 0
     c = 0
     while a == b and a == c and b == c:
-        a = random.randint(0, len(stock_blocks) - 1)
-        b = random.randint(0, len(stock_blocks) - 1)
-        c = random.randint(0, len(stock_blocks) - 1)
-    return [stock_blocks[a], stock_blocks[b], stock_blocks[c]]
+        a = random.randint(0, len(block_list) - 1)
+        b = random.randint(0, len(block_list) - 1)
+        c = random.randint(0, len(block_list) - 1)
+    return [block_list[a], block_list[b], block_list[c]]
 
-def get_block_for_board_choice(choice) :
-    grid_blocks = os.listdir("Level\Blocks\common")
+
+def get_block_for_board_choice(choice):  # returns the block corresponding to the choice of board
+    grid_blocks = os.listdir("Level\\Blocks\\common")
     if choice == 1:
-        grid_blocks += os.listdir("Level\Blocks\circle")
+        grid_blocks += os.listdir("Level\\Blocks\\circle")
     elif choice == 2:
-        grid_blocks += os.listdir("Level\Blocks\\triangle")
+        grid_blocks += os.listdir("Level\\Blocks\\triangle")
     elif choice == 3:
-        grid_blocks += os.listdir("Level\Blocks\lozenge")
+        grid_blocks += os.listdir("Level\\Blocks\\lozenge")
     return grid_blocks
 
 
-def get_blocks_from_files(blocks_path):
+def get_blocks_from_files(blocks_path):  # returns a list of blocks from the list of paths
     block_list = []
     for block_path in blocks_path:
         block_list.append(load_block(block_path))
@@ -52,37 +53,33 @@ def main():
 
 
 def init_game():
-    actionChoice = menu()
-    if actionChoice == 2:
+    action_choice = menu()
+    if action_choice == 2:
         show_rules()
         return init_game()
 
-
-    gridType = select_grid_type()
-    gridSize = select_grid_size()
+    grid_type = select_grid_type()
+    grid_size = select_grid_size()
 
     global play_grid
-    if gridType == 0:
-        play_grid = create_circle_grid(gridSize)
-    elif gridType == 1:
-        play_grid = create_triangle_grid(gridSize)
-    elif gridType == 2:
-        play_grid = create_lozenge_grid(gridSize)
+    if grid_type == 0:
+        play_grid = create_circle_grid(grid_size)
+    elif grid_type == 1:
+        play_grid = create_triangle_grid(grid_size)
+    elif grid_type == 2:
+        play_grid = create_lozenge_grid(grid_size)
+
+    play_loop()
 
 
-    playLoop()
-
-
-def playLoop():
+def play_loop():
     global round_blocks
     round_blocks = random_blocks(stock_blocks)
 
     show_board(play_grid, round_blocks)
 
     selected_block_index = select_block(round_blocks)
-
     round_blocks[selected_block_index] = select_block_rotation(round_blocks[selected_block_index])
-
     position_x, position_y = select_block_position(play_grid, round_blocks[selected_block_index])
     while not can_emplace_block(play_grid, round_blocks[selected_block_index], position_x, position_y):
         global lives
@@ -102,19 +99,26 @@ def playLoop():
     score += compute_score(broken_squares)
     print("Score : " + str(score))
 
-    playLoop()
+    play_loop()
 
 
-def game_over():
+def game_over():  # function called when the player has no more lives
     show_game_over(score)
     exit(0)
 
 
-def compute_score(broken_squares):
+def compute_score(broken_squares):  # returns the score of the player for new broken squares
     return broken_squares ** 2
 
 
-def parse_essential_commands(value):
+def get_input(text):
+    input_text = Display.proxy.get_input_not_parsed(text)
+    if parse_essential_commands(input_text):
+        return get_input(text)
+    return input_text
+
+
+def parse_essential_commands(value):  # called each time a player is asked for an input and detects if the player wants to execute an essential command
     value.lower()
     if value == "exit":
         exit(0)

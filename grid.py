@@ -1,5 +1,7 @@
-def save_grid(grid, filePath):
-    with open(filePath, 'w') as f:
+# grid management module
+
+def save_grid(grid, file_path):  # save the grid in a file at the path specified
+    with open(file_path, 'w') as f:
         for x in range(len(grid)):
             for y in range(len(grid[x]) - 1):
                 f.write(str(grid[x][y]))
@@ -8,57 +10,58 @@ def save_grid(grid, filePath):
             f.write("\n")
 
 
-def create_circle_grid(diameter):
+def create_circle_grid(size):  # create a grid with a circle shape
     def is_in_circle(x, y, radius):
-        return (x + 0.5 - radius) ** 2 + (y + 0.5 - radius) ** 2 <= radius ** 2
+        return (x + 0.5 - radius) ** 2 + (y + 0.5 - radius) ** 2 <= radius ** 2  # offset by 0.5 to center the sample point in the middle of the cell
 
     grid = []
-    for x in range(diameter):
+    for x_index in range(size):
         grid.append([])
-        for y in range(diameter):
-            if is_in_circle(x, y, diameter / 2):
-                grid[x].append(1)
+        for y_index in range(size):
+            if is_in_circle(x_index, y_index, size / 2):
+                grid[x_index].append(1)
             else:
-                grid[x].append(0)
+                grid[x_index].append(0)
     return grid
 
 
-def create_triangle_grid(taille):
+def create_triangle_grid(size):  # create a grid with a triangle shape
     grid = []
-    for k in range(int(taille / 2) + 1):
+    for k in range(int(size / 2) + 1):
         grid.append([])
-        middle = int(taille / 2)
-        for i in range(taille):
-            if (i <= middle + k and i >= middle - k):
+        middle = int(size / 2)
+        for i in range(size):
+            if middle - k <= i <= middle + k:
                 grid[k].append(1)
             else:
                 grid[k].append(0)
     return grid
 
 
-def create_lozenge_grid(taille):
+def create_lozenge_grid(size):  # create a grid with a lozenge shape
     grid = []
-    a = -1
-    middle = int(taille / 2)
-    for k in range(int(taille / 2) + 1):
+    a = -1  # a represents the width of the lozenge
+    middle = int(size / 2)
+    for k in range(int(size / 2) + 1):
         a += 1
         grid.append([])
-        for i in range(taille):
-            if (i <= middle + a and i >= middle - a):
+        for i in range(size):
+            if middle - a <= i <= middle + a:
                 grid[k].append(1)
             else:
                 grid[k].append(0)
-    for k in range(int(taille / 2) + 1, taille):
+    for k in range(int(size / 2) + 1, size):
         grid.append([])
         a -= 1
-        for i in range(taille):
-            if (i <= middle + a and i >= middle - a):
+        for i in range(size):
+            if middle - a <= i <= middle + a:
                 grid[k].append(1)
             else:
                 grid[k].append(0)
     return grid
 
-def can_emplace_block(grid, block, x, y):
+
+def can_emplace_block(grid, block, x, y):  # check if the block can be placed at the position
     for i in range(len(block)):
         for j in range(len(block[i])):
             if not is_in_grid(grid, x + j, y - len(block) + 1 + i):
@@ -69,64 +72,70 @@ def can_emplace_block(grid, block, x, y):
                 return False
     return True
 
-def emplace_block(grid, block, x, y):
+
+def emplace_block(grid, block, x, y):  # place the block at the position
     for i in range(len(block)):
         for j in range(len(block[i])):
             if block[i][j] == 1:
                 grid[y - len(block) + 1 + i][x + j] = 2
 
 
-def is_column_full(grid, x):
+def is_column_full(grid, x):  # check if the column is full
     for y in range(len(grid)):
         if grid[y][x] == 1:
             return False
     return True
 
-def is_row_full(grid, y):
+
+def is_row_full(grid, y):  # check if the row is full
     for x in range(len(grid[y])):
         if grid[y][x] == 1:
             return False
     return True
 
-def bring_cube_down_from_column_index(grid, rowIndex):
-    if rowIndex < 0 or rowIndex >= len(grid[0]) - 1:
+
+def bring_cube_down_from_column_index(grid, row_index):  # bring the cube down from the row index
+    if row_index < 0 or row_index >= len(grid[0]) - 1:
         return
-    for y in range(rowIndex, -1, -1):
+    for y in range(row_index, -1, -1):
         for x in range(len(grid)):
             if grid[y + 1][x] == 1 and grid[y][x] == 2:
                 grid[y + 1][x] = 2
                 grid[y][x] = 1
 
-def fill_column(grid, x):
+
+def fill_column(grid, x):  # fill a column
     for y in range(len(grid)):
         if grid[y][x] == 1:
             grid[y][x] = 2
 
 
-def empty_column(grid, x):
+def empty_column(grid, x):  # empty a column
     for y in range(len(grid)):
         if grid[y][x] == 2:
             grid[y][x] = 1
 
-def fill_row(grid, y):
+
+def fill_row(grid, y):  # fill a row
     for x in range(len(grid[y])):
         if grid[y][x] == 1:
             grid[y][x] = 2
 
 
-def empty_row(grid, y):
+def empty_row(grid, y):  # empty a row
     for x in range(len(grid[y])):
         if grid[y][x] == 2:
             grid[y][x] = 1
 
 
-def fill_all_grid(grid):
+def fill_all_grid(grid):  # fill the grid (used for the test)
     for y in range(len(grid)):
         for x in range(len(grid[y])):
             if grid[y][x] == 1:
                 grid[y][x] = 2
 
-def check_for_full_row_or_column(grid):
+
+def check_for_full_row_or_column(grid):  # check if there is full rows or columns and remove them
     broken_squares = 0
     for y in range(0, len(grid)):
         if is_row_full(grid, y):  # fallen squares can fill the line
@@ -141,28 +150,34 @@ def check_for_full_row_or_column(grid):
     return broken_squares
 
 
-def is_in_grid(grid, x, y):
-    return x >= 0 and x < len(grid[0]) and y >= 0 and y < len(grid)
+def is_in_grid(grid, x, y):  # check if the position is in the grid
+    return 0 <= x < len(grid[0]) and 0 <= y < len(grid)
 
 
-def is_empty(grid, x, y):
+def is_empty(grid, x, y):  # check if the position is empty
     b = grid[y][x] == 1
     return b
 
-def is_in_grid_and_empty(grid, x, y):
+
+def is_in_grid_and_empty(grid, x, y):  # check if the position is in the grid and empty
     return is_in_grid(grid, x, y) and is_empty(grid, x, y)
+
 
 def row_state(grid, i):
     return is_row_full(grid, i)
 
+
 def col_state(grid, j):
     return is_column_full(grid, j)
+
 
 def row_clear(grid, i):
     empty_row(grid, i)
 
+
 def col_clear(grid, j):
     empty_column(grid, j)
+
 
 def valid_position(grid, block, i, j):
     return can_emplace_block(grid, block, i, j)

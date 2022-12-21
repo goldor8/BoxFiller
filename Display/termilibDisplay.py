@@ -1,7 +1,7 @@
-import time
+# display module for termilib
 
 from Display import termilib
-from main import parse_essential_commands
+from main import get_input
 from Display.viewBufferUtil import *
 
 
@@ -10,7 +10,6 @@ def show_board(play_grid, blocks):
     x_pos = 5
     y_pos = 2
     clear_view(grid_view)
-
 
     # Add letter on top of each column
     termilib.set_cursor_position(x_pos, y_pos)
@@ -125,6 +124,7 @@ def select_grid_size():
             grid_size = 0
         termilib.flush_keys()
 
+
 def draw_selected_grid_size(grid_size):
     termilib.set_cursor_position(40, 3)
     termilib.write("Selected grid size: ")
@@ -202,10 +202,3 @@ def get_input_not_parsed(text):
     input_text = input(text)
     termilib.start_async_key_listener()
     return input_text
-
-
-def get_input(text):
-    str = get_input_not_parsed(text)
-    if parse_essential_commands(str):
-        return get_input(text)
-    return str

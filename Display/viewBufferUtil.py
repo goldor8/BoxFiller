@@ -1,3 +1,5 @@
+# utility module for display using a view buffer (list of string)
+
 viewLine = 0
 
 
@@ -12,13 +14,14 @@ def increment_view_line():
 
 
 def add_to_view(value, view):
-    if (viewLine >= len(view)):
+    if viewLine >= len(view):
         for i in range(len(view), viewLine + 1):
             view.append("")
     view[viewLine] = view[viewLine] + value
 
 
 def add_line_to_view(line, view):
+    global viewLine
     view.append(line)
     viewLine += 1
 
