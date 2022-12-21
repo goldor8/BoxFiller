@@ -11,9 +11,19 @@ play_grid = []  # represents the grid on which the player is playing
 stock_blocks = [[[0, 0, 1], [0, 1, 1], [1, 1, 1]], [[0, 1, 0], [1, 1, 1], [0, 1, 0]],
                 [[1, 1, 1], [1, 1, 1], [1, 1, 1]]] * 5
 round_blocks = []  # blocks that will be used after the board shape has been chosen
+block_picking_way = 0    # 0 = 3 random blocks from stock_blocks, 1 = all blocks from stock_blocks
 
 lives = 3
 score = 0
+
+
+def number_of_blocks(block_list, grid_shape_choice):
+    num_block_choice = select_block_picking_way()
+    if num_block_choice == 1:
+        stock_blocks = random_blocks(block_list)
+    else:
+        stock_blocks = get_blocks_from_files(get_paths_for_board_choice(grid_shape_choice))
+    return stock_blocks
 
 
 def random_blocks(block_list):  # returns a list of 3 random blocks
@@ -27,7 +37,7 @@ def random_blocks(block_list):  # returns a list of 3 random blocks
     return [block_list[a], block_list[b], block_list[c]]
 
 
-def get_block_for_board_choice(choice):  # returns the block corresponding to the choice of board
+def get_paths_for_board_choice(choice):  # returns the paths corresponding to the choice of board
     grid_blocks = "Level\\Blocks\\common" + os.listdir("Level\\Blocks\\common")
     if choice == 1:
         grid_blocks += "Level\\Blocks\\circle" + os.listdir("Level\\Blocks\\circle")
@@ -60,6 +70,9 @@ def init_game():
 
     grid_type = select_grid_type()
     grid_size = select_grid_size()
+    stock_blocks = get_blocks_from_files(get_paths_for_board_choice(grid_type))
+
+    block_picking_way = select_block_picking_way()
 
     global play_grid
     if grid_type == 0:
@@ -131,3 +144,4 @@ def parse_essential_commands(value):  # called each time a player is asked for a
 
 if __name__ == "__main__":
     main()
+

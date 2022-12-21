@@ -1,7 +1,7 @@
 # proxy used to redirect the calls to the right display
 
 use_termilib = False
-use_pygame = True
+use_pygame = False
 
 if use_termilib:
     import Display.termilibDisplay as termilibDisplay
@@ -99,3 +99,10 @@ def show_game_over(score):  # show game over screen
         pygameDisplay.show_game_over(score)
     else:
         terminalDisplay.show_game_over(score)
+
+
+def select_block_picking_way():
+    block_picking_way = 0
+    while block_picking_way != 1 and block_picking_way != 2:
+        block_picking_way = int(input("choose if you want to play with 3 random blocks or all the blocks : "))
+    return block_picking_way
