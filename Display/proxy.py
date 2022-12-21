@@ -1,7 +1,7 @@
 # proxy used to redirect the calls to the right display
 
 use_termilib = False
-use_pygame = False
+use_pygame = True
 
 if use_termilib:
     import Display.termilibDisplay as termilibDisplay

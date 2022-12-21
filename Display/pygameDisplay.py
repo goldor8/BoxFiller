@@ -4,9 +4,9 @@ import pygame
 import grid
 from block import rotate_block
 
-title_font
-large_font
-screen
+title_font = None
+large_font = None
+screen = None
 square_size = 20
 empty_square_slot = pygame.transform.scale(pygame.image.load('resources/sprites/square_slot_smooth_down.png'),
                                            (square_size, square_size))
