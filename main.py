@@ -28,13 +28,14 @@ def random_blocks(block_list):  # returns a list of 3 random blocks
 
 
 def get_block_for_board_choice(choice):  # returns the block corresponding to the choice of board
-    grid_blocks = "Level\\Blocks\\common" + os.listdir("Level\\Blocks\\common")
+    grid_blocks = ["Level\\Blocks\\common\\" + i for i in os.listdir("Level\\Blocks\\common")]
+
     if choice == 1:
-        grid_blocks += "Level\\Blocks\\circle" + os.listdir("Level\\Blocks\\circle")
+        grid_blocks += ["Level\\Blocks\\circle" + i for i in os.listdir("Level\\Blocks\\circle")]
     elif choice == 2:
-        grid_blocks += "Level\\Blocks\\triangle" + os.listdir("Level\\Blocks\\triangle")
+        grid_blocks += ["Level\\Blocks\\triangle" + i for i in os.listdir("Level\\Blocks\\triangle")]
     elif choice == 3:
-        grid_blocks += "Level\\Blocks\\lozenge" + os.listdir("Level\\Blocks\\lozenge")
+        grid_blocks += ["Level\\Blocks\\lozenge" + i for i in os.listdir("Level\\Blocks\\lozenge")]
     return grid_blocks
 
 
