@@ -1,11 +1,15 @@
 # proxy used to redirect the calls to the right display
 
+from main import display_name
+
 use_termilib = False
 use_pygame = False
 
-if use_termilib:
+if display_name == "termilib":
+    use_termilib = True
     import Display.termilibDisplay as termilibDisplay
-elif use_pygame:
+elif display_name == "pygame":
+    use_pygame = True
     import Display.pygameDisplay as pygameDisplay
 else:
     import Display.terminalDisplay as terminalDisplay

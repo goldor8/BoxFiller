@@ -1,6 +1,11 @@
 # display module for pygame
 
-import pygame
+try:
+    import pygame
+except ModuleNotFoundError:
+    print("pygame is not installed. Please install it")
+    exit()
+
 import grid
 from block import rotate_block
 

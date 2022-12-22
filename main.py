@@ -1,10 +1,20 @@
-import Display.proxy
-from Display.proxy import *
+import sys
+import os
+import random
+
 from grid import *
 from block import *
 
-import os
-import random
+display_name = ""
+
+if __name__ == "__main__":
+    arg_count = len(sys.argv)
+    for i in range(arg_count):
+        if (sys.argv[i] == "-d" or sys.argv[i] == "--display") and i + 1 <= arg_count:
+            display_name = sys.argv[i + 1]
+            break
+
+from Display.proxy import *
 
 play_grid = []  # represents the grid on which the player is playing
 
@@ -38,7 +48,7 @@ def random_blocks(block_list):  # returns a list of 3 random blocks
 
 
 def get_paths_for_board_choice(choice):  # returns the paths corresponding to the choice of board
-    grid_blocks = "Level\\Blocks\\common" + os.listdir("Level\\Blocks\\common")
+    grid_blocks = ["Level\\Blocks\\common" + i for i in os.listdir("Level\\Blocks\\common")]
     if choice == 1:
         grid_blocks += ["Level\\Blocks\\circle" + i for i in os.listdir("Level\\Blocks\\circle")]
     elif choice == 2:
@@ -125,13 +135,14 @@ def compute_score(broken_squares):  # returns the score of the player for new br
 
 
 def get_input(text):
-    input_text = Display.proxy.get_input_not_parsed(text)
+    input_text = get_input_not_parsed(text)
     if parse_essential_commands(input_text):
         return get_input(text)
     return input_text
 
 
-def parse_essential_commands(value):  # called each time a player is asked for an input and detects if the player wants to execute an essential command
+def parse_essential_commands(
+        value):  # called each time a player is asked for an input and detects if the player wants to execute an essential command
     value.lower()
     if value == "exit":
         exit(0)
