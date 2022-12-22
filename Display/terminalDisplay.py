@@ -125,21 +125,14 @@ def select_grid_type():
     print("2. Triangle")
     print("3. Lozenge")
 
-    grid_type = get_input("Enter your choice : ")
-    while grid_type not in ["1", "2", "3"]:
-        print("Invalid choice !")
-        grid_type = get_input("Enter your choice : ")
-
+    grid_type = get_valid_int_input("Enter your choice : ", lambda x: x in [1, 2, 3])
     return int(grid_type) - 1
 
 
 def select_grid_size():
     print("Select grid odd size between 21 and 25 : ")
-    grid_size = int(get_input("Enter your choice : "))
-    while grid_size not in range(21, 27) or grid_size % 2 == 0:
-        print("Invalid choice !")
-        grid_size = int(get_input("Enter your choice : "))
 
+    grid_size = get_valid_int_input("Enter your choice : ", lambda x: x in range(21, 27) and x % 2 == 1)
     return grid_size
 
 
@@ -148,11 +141,7 @@ def menu():
     print("1. Play")
     print("2. Show rules")
 
-    choice = int(get_input("Enter your choice : "))
-    while choice != 1 and choice != 2:
-        print("Invalid choice !")
-        choice = int(get_input("Enter your choice : "))
-
+    choice = get_valid_int_input("Enter your choice : ", lambda x: x in [1, 2])
     return choice
 
 
@@ -188,7 +177,7 @@ def select_block_position(play_grid, selected_block):
 def select_block(list_blocks):
     num_block = 0
     while (num_block < 1) or (num_block > len(list_blocks)):
-        num_block = int(get_input("Choose a block : "))
+        num_block = get_valid_int_input("Enter block number : ", lambda x: x in range(1, len(list_blocks) + 1))
     return num_block - 1
 
 
@@ -220,3 +209,14 @@ def show_game_over(score):
     print("Game over !")
     print("Your score is : " + str(score))
     get_input("Press any key to continue")
+
+
+def get_valid_int_input(text, valid_expression_lambda):
+    def is_digit_and_valid(input_text):
+        return input_text.isdigit() and valid_expression_lambda(int(input_text))
+
+    input_text = get_input(text)
+    while not is_digit_and_valid(input_text):
+        print("Invalid integer !")
+        input_text = get_input(text)
+    return int(input_text)
