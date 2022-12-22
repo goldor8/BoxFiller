@@ -3,6 +3,7 @@ import os
 import random
 
 from grid import *
+import Display.proxy as proxy  # different proxy import to avoid strange import errors
 from block import *
 
 display_name = ""
@@ -135,7 +136,7 @@ def compute_score(broken_squares):  # returns the score of the player for new br
 
 
 def get_input(text):
-    input_text = get_input_not_parsed(text)
+    input_text = proxy.get_input_not_parsed(text)
     if parse_essential_commands(input_text):
         return get_input(text)
     return input_text
