@@ -5,7 +5,6 @@ Author : Brisset Dimitri, Occhiminuti Marius
 """
 
 import sys
-import os
 import random
 import Display.proxy as proxy
 
@@ -22,14 +21,22 @@ lives = 3
 score = 0
 
 
-def main():
+def main() -> None:
+    """
+    Main function
+    :return: None
+    """
     print("Welcome to BoxFiller !")
     init_game()
 
     input("Press any key to continue")
 
 
-def init_game():  # function called at the beginning of the game
+def init_game() -> None:
+    """
+    function called at the beginning of the game
+    :return: None
+    """
     action_choice = proxy.menu()
     if action_choice == 2:
         proxy.show_rules()
@@ -38,7 +45,7 @@ def init_game():  # function called at the beginning of the game
     grid_type = proxy.select_grid_type()
     grid_size = proxy.select_grid_size()
     global stock_blocks
-    stock_blocks = get_blocks_from_files(get_paths_for_board_choice(grid_type))
+    stock_blocks = get_blocks_from_files(get_block_paths_for_board_choice(grid_type))
     normalize_block_list(stock_blocks)
 
     global block_picking_manner
@@ -55,25 +62,11 @@ def init_game():  # function called at the beginning of the game
     play_loop()
 
 
-def get_paths_for_board_choice(choice):  # returns the paths corresponding to the choice of board
-    grid_blocks = ["Level/Blocks/common/" + i for i in os.listdir("Level/Blocks/common")]
-    if choice == 0:
-        grid_blocks += ["Level/Blocks/circle/" + i for i in os.listdir("Level/Blocks/circle")]
-    elif choice == 1:
-        grid_blocks += ["Level/Blocks/triangle/" + i for i in os.listdir("Level/Blocks/triangle")]
-    elif choice == 2:
-        grid_blocks += ["Level/Blocks/lozenge/" + i for i in os.listdir("Level/Blocks/lozenge")]
-    return grid_blocks
-
-
-def get_blocks_from_files(blocks_path):  # returns a list of blocks from the list of paths
-    block_list = []
-    for block_path in blocks_path:
-        block_list.append(load_block(block_path))
-    return block_list
-
-
-def play_loop():  # determine all the actions to be done during a round
+def play_loop() -> None:
+    """
+    Main loop of the game (determine all the actions to be done during a round)
+    :return: None
+    """
     update_round_blocks()
 
     global round_blocks
@@ -103,12 +96,20 @@ def play_loop():  # determine all the actions to be done during a round
     play_loop()
 
 
-def game_over():  # function called when the player has no more lives
+def game_over() -> None:
+    """
+    function called when the player has no more lives
+    :return: None
+    """
     proxy.show_game_over(score)
     exit(0)
 
 
-def update_round_blocks():  # updates the list of blocks that will be used in the next round
+def update_round_blocks() -> None:
+    """
+    Updates the list of blocks that will be used in the next round
+    :return: None (updates the global variable round_blocks)
+    """
     global round_blocks
     if block_picking_manner == 0:
         round_blocks = stock_blocks
@@ -116,7 +117,12 @@ def update_round_blocks():  # updates the list of blocks that will be used in th
         round_blocks = random_blocks(stock_blocks)
 
 
-def random_blocks(block_list):  # returns a list of 3 random blocks
+def random_blocks(block_list: list) -> list:
+    """
+    Returns a list of 3 random blocks
+    :param block_list: list of blocks from which the random blocks will be chosen
+    :return: list of 3 random blocks
+    """
     a = 0
     b = 0
     c = 0
@@ -127,34 +133,51 @@ def random_blocks(block_list):  # returns a list of 3 random blocks
     return [block_list[a], block_list[b], block_list[c]]
 
 
-def compute_score(broken_squares):  # returns the score of the player for new broken squares
+def compute_score(broken_squares: int) -> int:
+    """
+    Computes the score of the player for new broken squares
+    :param broken_squares: number of broken squares
+    :return: score of the player for new broken squares
+    """
     return broken_squares ** 2
 
 
-def get_input(text):  # called each time a player is asked for an input and detects if the player wants to execute an essential command
+def get_input(text: str) -> str:
+    """
+    called each time a player is asked for an input and detects if the player wants to execute an essential command
+    :param text: text to be displayed to the player
+    :return: input of the player
+    """
     input_text = proxy.get_input_not_parsed(text)
     if parse_essential_commands(input_text):
         return get_input(text)
     return input_text
 
 
-def parse_essential_commands(value):  # called each time a player is asked for an input and detects if the player wants to execute an essential command
-    value.lower()
-    if value == "exit":
+def parse_essential_commands(input_text: str) -> bool:
+    """
+    called each time a player is asked for an input and detects if the player wants to execute an essential command
+    :param input_text: input of the player
+    :return: True if the player has executed an essential command, False otherwise
+    """
+    input_text.lower()
+    if input_text == "exit":
         exit(0)
         return True
-    elif value == "help":
+    elif input_text == "help":
         print("help")
         return True
     return False
 
 
 if __name__ == "__main__":
+    # parse arguments
     display_name = ""
     arg_count = len(sys.argv)
     for i in range(arg_count):
         if (sys.argv[i] == "-d" or sys.argv[i] == "--display") and i + 1 <= arg_count:
             display_name = sys.argv[i + 1]
             break
+
     proxy.init_display(display_name)
     main()

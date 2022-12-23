@@ -44,7 +44,11 @@ def init_display():
     pygame.display.set_caption('Game')
 
 
-def menu():
+def menu() -> int:
+    """
+    show the user a menu and ask to choose play or show rules option
+    :return: the option selected (0 = play, 1 = show rules)
+    """
     init_display()
     global screen
     global large_font
@@ -100,7 +104,11 @@ def menu():
         pygame.display.flip()
 
 
-def select_grid_type():
+def select_grid_type() -> int:
+    """
+    ask user to select a grid type
+    :return: the grid type selected (0 = circle, 1 = triangle, 2 = lozenge)
+    """
     global screen
     global large_font
     title_surf = title_font.render('Select Grid Type', True, text_color)
@@ -164,7 +172,11 @@ def select_grid_type():
         pygame.display.flip()
 
 
-def select_grid_size():
+def select_grid_size() -> int:
+    """
+    ask user to select a grid size
+    :return: the grid size selected
+    """
     global screen
     global large_font
     title_surf = title_font.render('Select Grid Size', True, text_color)
@@ -238,7 +250,11 @@ def select_grid_size():
         pygame.display.flip()
 
 
-def select_block_picking_manner():
+def select_block_picking_manner() -> int:
+    """
+    ask user to select a block picking manner
+    :return: the block picking manner selected (0 = all block, 1 = 3 random blocks)
+    """
     global screen
     global large_font
 
@@ -338,10 +354,16 @@ def draw_block(block, offset_x, offset_y):
 
 
 selected_block = None
-block_position = None
+block_position = tuple()
 
 
-def show_board(play_grid, blocks):
+def show_board(play_grid: list, blocks: list) -> None:
+    """
+    show the main information of the game
+    :param play_grid: the grid to display
+    :param blocks: the blocks to display
+    :return: None (only display the grid and the blocks)
+    """
     global screen
     global large_font
     global empty_square_slot
@@ -440,20 +462,41 @@ def get_grid_coord_mouse_on(play_grid, mouse_x, mouse_y, offset_x, offset_y):
         return -1, -1
 
 
-def select_block(round_blocks):
+def select_block(round_blocks: list) -> int:
+    """
+    ask user to select a block
+    :param round_blocks: the blocks to choose from
+    :return: the index of block selected
+    """
     global selected_block
     return selected_block
 
 
-def select_block_rotation(selected_block):
+def select_block_rotation(selected_block: list) -> list:
+    """
+    ask user to select a block rotation
+    :param selected_block: the block to rotate
+    :return: the rotated block
+    """
     return selected_block
 
 
-def select_block_position(play_grid, selected_block):
+def select_block_position(play_grid: list, selected_block: list) -> tuple:
+    """
+    ask user to select a block position
+    :param play_grid: the grid to play on
+    :param selected_block: the block to place
+    :return: the position selected (x, y)
+    """
     return block_position
 
 
-def show_game_over(score):
+def show_game_over(score: int) -> None:
+    """
+    show the game over screen
+    :param score: the score of the player
+    :return: None (only display the game over screen)
+    """
     global screen
     global large_font
 
@@ -470,5 +513,33 @@ def show_game_over(score):
 
         text = large_font.render("Score: " + str(score), True, text_color)
         screen.blit(text, text.get_rect(center=(400, 400)))
+
+        pygame.display.flip()
+
+
+def show_rules() -> None:
+    """
+    show the rules to the user
+    :return: None (only display the rules)
+    """
+    global screen
+    global large_font
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit(0)
+
+        screen.fill(background_color)
+
+        text = title_font.render("Rules", True, text_color)
+        screen.blit(text, text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2 - 100)))
+
+        text = large_font.render("You have to fill the grid with the blocks", True, text_color)
+        screen.blit(text, text.get_rect(center=(400, 400)))
+
+        text = large_font.render("You can rotate the blocks with the 'R' key", True, text_color)
+        screen.blit(text, text.get_rect(center=(400, 450)))
 
         pygame.display.flip()

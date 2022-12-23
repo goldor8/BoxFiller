@@ -15,7 +15,12 @@ use_termilib = False
 use_pygame = False
 
 
-def init_display(display_type):  # set the display to use
+def init_display(display_type: str) -> None:
+    """
+    set the display to use
+    :param display_type: the display type to use ("termilib", "pygame", nothing (terminal))
+    :return: None (set the global variable)
+    """
     global use_termilib, use_pygame
     if display_type == "termilib":
         use_termilib = True
@@ -23,7 +28,13 @@ def init_display(display_type):  # set the display to use
         use_pygame = True
 
 
-def show_board(play_grid, blocks):  # show the main information of the game
+def show_board(play_grid: list, blocks: list) -> None:
+    """
+    show the main information of the game
+    :param play_grid: the grid to display
+    :param blocks: the blocks to display
+    :return: None (only display the grid and the blocks)
+    """
     if use_termilib:
         termilibDisplay.show_board(play_grid, blocks)
     elif use_pygame:
@@ -32,7 +43,11 @@ def show_board(play_grid, blocks):  # show the main information of the game
         terminalDisplay.show_board(play_grid, blocks)
 
 
-def select_grid_type():  # ask user to select a grid type
+def select_grid_type() -> int:
+    """
+    ask user to select a grid type
+    :return: the grid type selected (0 = circle, 1 = triangle, 2 = lozenge)
+    """
     if use_termilib:
         return termilibDisplay.select_grid_type()
     elif use_pygame:
@@ -41,7 +56,11 @@ def select_grid_type():  # ask user to select a grid type
         return terminalDisplay.select_grid_type()
 
 
-def select_grid_size():  # ask user to select a grid size
+def select_grid_size() -> int:
+    """
+    ask user to select a grid size
+    :return: the grid size selected
+    """
     if use_termilib:
         return termilibDisplay.select_grid_size()
     elif use_pygame:
@@ -50,7 +69,11 @@ def select_grid_size():  # ask user to select a grid size
         return terminalDisplay.select_grid_size()
 
 
-def menu():  # show the user a menu and ask to choose play or show rules option
+def menu() -> int:
+    """
+    show the user a menu and ask to choose play or show rules option
+    :return: the option selected (0 = play, 1 = show rules)
+    """
     if use_termilib:
         return termilibDisplay.menu()
     elif use_pygame:
@@ -59,7 +82,11 @@ def menu():  # show the user a menu and ask to choose play or show rules option
         return terminalDisplay.menu()
 
 
-def show_rules():  # show rules to the user
+def show_rules() -> None:
+    """
+    show the rules to the user
+    :return: None (only display the rules)
+    """
     if use_termilib:
         termilibDisplay.show_rules()
     elif use_pygame:
@@ -68,7 +95,12 @@ def show_rules():  # show rules to the user
         terminalDisplay.show_rules()
 
 
-def get_input_not_parsed(text):  # get input from different display system
+def get_input_not_parsed(text: str) -> str:
+    """
+    get input from different display system
+    :param text: the text to display
+    :return: the input from the user
+    """
     if use_termilib:
         return termilibDisplay.get_input_not_parsed(text)
     elif use_pygame:
@@ -77,7 +109,12 @@ def get_input_not_parsed(text):  # get input from different display system
         return terminalDisplay.get_input_not_parsed(text)
 
 
-def select_block(round_blocks):  # ask user to select a block
+def select_block(round_blocks: list) -> int:
+    """
+    ask user to select a block
+    :param round_blocks: the blocks to choose from
+    :return: the index of block selected
+    """
     if use_termilib:
         return termilibDisplay.select_block(round_blocks)
     elif use_pygame:
@@ -86,7 +123,13 @@ def select_block(round_blocks):  # ask user to select a block
         return terminalDisplay.select_block(round_blocks)
 
 
-def select_block_position(play_grid, selected_block):  # ask user to select a block position
+def select_block_position(play_grid: list, selected_block: list) -> tuple:
+    """
+    ask user to select a block position
+    :param play_grid: the grid to play on
+    :param selected_block: the block to place
+    :return: the position selected (x, y)
+    """
     if use_termilib:
         return termilibDisplay.select_block_position(play_grid, selected_block)
     elif use_pygame:
@@ -95,7 +138,12 @@ def select_block_position(play_grid, selected_block):  # ask user to select a bl
         return terminalDisplay.select_block_position(play_grid, selected_block)
 
 
-def select_block_rotation(selected_block):  # ask user for a rotation
+def select_block_rotation(selected_block: list) -> list:
+    """
+    ask user to select a block rotation
+    :param selected_block: the block to rotate
+    :return: the rotated block
+    """
     if use_termilib:
         return termilibDisplay.select_block_rotation(selected_block)
     elif use_pygame:
@@ -104,7 +152,12 @@ def select_block_rotation(selected_block):  # ask user for a rotation
         return terminalDisplay.select_block_rotation(selected_block)
 
 
-def show_game_over(score):  # show game over screen
+def show_game_over(score: int) -> None:
+    """
+    show the game over screen
+    :param score: the score of the player
+    :return: None (only display the game over screen)
+    """
     if use_termilib:
         termilibDisplay.show_game_over(score)
     elif use_pygame:
@@ -113,7 +166,11 @@ def show_game_over(score):  # show game over screen
         terminalDisplay.show_game_over(score)
 
 
-def select_block_picking_manner():  # ask user to select a block picking manner
+def select_block_picking_manner() -> int:
+    """
+    ask user to select a block picking manner
+    :return: the block picking manner selected (0 = all block, 1 = 3 random blocks)
+    """
     if use_termilib:
         return termilibDisplay.select_block_picking_manner()
     elif use_pygame:

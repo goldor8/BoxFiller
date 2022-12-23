@@ -3,6 +3,7 @@ Project : BoxFiller
 Description : This module is used to load and manipulate blocks
 Author : Brisset Dimitri, Occhiminuti Marius
 """
+import os
 
 
 def load_block(path: str) -> list:
@@ -45,7 +46,7 @@ def rotate_block(block: list) -> list:
     return rotated_block
 
 
-def normalize_block_list(block_list: list):
+def normalize_block_list(block_list: list) -> None:
     """
     Normalize a list of blocks to the same size
     :param block_list: the list of blocks to normalize
@@ -61,7 +62,7 @@ def normalize_block_list(block_list: list):
         normalize_block(block_list[i], max_side, max_side)
 
 
-def normalize_block(block: list, height: int, width: int):
+def normalize_block(block: list, height: int, width: int) -> None:
     """
     Normalize a block to a given size (add empty lines and columns)
     :param block: block to normalize
@@ -78,7 +79,7 @@ def normalize_block(block: list, height: int, width: int):
             block[i].append(0)
 
 
-def wrap_block(block: list):
+def wrap_block(block: list) -> None:
     """
     Wrap a block in a list (remove entirely empty lines and columns)
     :param block: the block to wrap
@@ -102,3 +103,31 @@ def wrap_block(block: list):
                 block[j].pop(i)
         else:
             break
+
+
+def get_block_paths_for_board_choice(choice: int) -> list:
+    """
+    Get the paths of blocks corresponding to the choice of board
+    :param choice: the choice of board (0 = circle, 1 = triangle, 2 = lozenge)
+    :return: the paths of blocks corresponding to the choice of board
+    """
+    grid_blocks = ["Level/Blocks/common/" + i for i in os.listdir("Level/Blocks/common")]
+    if choice == 0:
+        grid_blocks += ["Level/Blocks/circle/" + i for i in os.listdir("Level/Blocks/circle")]
+    elif choice == 1:
+        grid_blocks += ["Level/Blocks/triangle/" + i for i in os.listdir("Level/Blocks/triangle")]
+    elif choice == 2:
+        grid_blocks += ["Level/Blocks/lozenge/" + i for i in os.listdir("Level/Blocks/lozenge")]
+    return grid_blocks
+
+
+def get_blocks_from_files(blocks_path: list) -> list:
+    """
+    Get the blocks from a list of paths
+    :param blocks_path: paths of files containing blocks
+    :return: the blocks contained in the files
+    """
+    block_list = []
+    for block_path in blocks_path:
+        block_list.append(load_block(block_path))
+    return block_list

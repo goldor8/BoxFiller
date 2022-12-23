@@ -1,5 +1,5 @@
 """
-Project : BoxFiller
+Project : Termilib
 Description : Library to use the terminal
 Author : Brisset Dimitri
 """
@@ -23,7 +23,13 @@ colors = {"black": 0, "blue": 21, "green": 40, "cyan": 44, "red": 160, "purple":
           "light_yellow": 227, "bright_white": 255}
 
 
-def set_terminal_size(cols, rows):
+def set_terminal_size(cols: int, rows: int) -> None:
+    """
+    Set the terminal size
+    :param cols: number of columns
+    :param rows: number of rows
+    :return: None
+    """
     global buffer
     for i in range(rows):
         buffer.append(["{}{} ".format(fg_color, bg_color)] * (cols))
@@ -33,55 +39,108 @@ def set_terminal_size(cols, rows):
     size_x = cols
 
 
-def get_terminal_size():
+def get_terminal_size() -> tuple:
+    """
+    Get the terminal size
+    :return: (columns, rows)
+    """
     return size_x, size_y
 
 
-def move_cursor_at(x, y):
+def move_cursor_at(x: int, y: int) -> None:
+    """
+    Move the cursor at the given position
+    :param x: x position
+    :param y: y position
+    :return: None
+    """
     global position_x
     global position_y
     position_y = y
     position_x = x
 
 
-def in_bounds(x, y):
+def in_bounds(x: int, y: int) -> bool:
+    """
+    Check if the given position is in the terminal bounds
+    :param x: x position
+    :param y: y position
+    :return: True if the position is in the terminal bounds, False otherwise
+    """
     return x >= 0 and y >= 0 and x < size_x and y < size_y
 
 
-def write_at(x, y, text):
+def write_at(x: int, y: int, text: str) -> None:
+    """
+    Write the given text at the given position
+    :param x: x position
+    :param y: y position
+    :param text: text to write
+    :return: None
+    """
     global buffer
     for i in range(len(text)):
         if in_bounds(x + i, y):
             buffer[y][x + i] = fg_color + bg_color + text[i]
 
 
-def vertical_write_at(x, y, text):
+def vertical_write_at(x: int, y: int, text: str) -> None:
+    """
+    Write the given text vertically at the given position
+    :param x: x position
+    :param y: y position
+    :param text: text to write
+    :return: None
+    """
     global buffer
     for i in range(len(text)):
         if in_bounds(x, y + i):
             buffer[y + i][x] = fg_color + bg_color + text[i]
 
 
-def write(text):
+def write(text: str) -> None:
+    """
+    Write the given text at the current cursor position
+    :param text: text to write
+    :return: None
+    """
     write_at(position_x, position_y, text)
     move_cursor_at(position_x + len(text), position_y)
 
 
-def clear_screen():
+def clear_screen() -> None:
+    """
+    Clear the terminal screen
+    :return: None
+    """
     os.system('cls')
 
 
-def set_color(color):
+def set_color(color: int) -> None:
+    """
+    Set the foreground color
+    :param color: color to set
+    :return: None
+    """
     global fg_color
     fg_color = "\033[38;5;{}m".format(color)
 
 
-def set_background_color(color):
+def set_background_color(color: int) -> None:
+    """
+    Set the background color
+    :param color: color to set
+    :return: None
+    """
     global bg_color
     bg_color = "\033[48;5;{}m".format(color)
 
 
-def reset_color():
+def reset_color() -> None:
+    """
+    Reset the color (white foreground and black background)
+    :return: None
+    """
     global fg_color
     global bg_color
     fg_color = "\033[38;5;255m"
@@ -89,65 +148,132 @@ def reset_color():
     print(fg_color + bg_color, end="")
 
 
-def render():
+def render() -> None:
+    """
+    Render the buffer to the terminal
+    :return: None
+    """
     global buffer
     set_cursor_position(0, 0)
+    _set_non_buffered_cursor(0, 0)
     lines = []
     for i in range(len(buffer)):
         lines.append("".join(buffer[i]))
-    sys.stdout.write("\r".join(lines))
+    sys.stdout.write("\n".join(lines))
     sys.stdout.flush()
 
 
-def clear_buffer():
+def clear_buffer() -> None:
+    """
+    Clear the buffer
+    :return: None
+    """
     global buffer
     buffer = []
     for i in range(size_y):
         buffer.append(["{}{} ".format(fg_color, bg_color)] * size_x)
 
 
-def flush():
+def flush() -> None:
+    """
+    Render the buffer to the terminal, clear the buffer and reset the color and the cursor position
+    :return: None
+    """
     render()
     reset_color()
     clear_buffer()
 
 
-def get_cursor_position():
+def get_cursor_position() -> tuple:
+    """
+    Get the cursor position
+    :return: (x, y)
+    """
     return position_x, position_y
 
 
-def set_cursor_position(x, y):
+def set_cursor_position(x: int, y: int) -> None:
+    """
+    Set the cursor position in the buffer
+    :param x: x position
+    :param y: y position
+    :return: None
+    """
     global position_x
     global position_y
     position_x = x
     position_y = y
 
 
-def _set_non_buffered_cursor(x, y):
+def _set_non_buffered_cursor(x: int, y: int) -> None:
+    """
+    Set the cursor position in the terminal
+    :param x: x position
+    :param y: y position
+    :return: None
+    """
     print("\033[{};{}H".format(y, x), end="")
 
 
-def draw_line(x, y, length, char):
+def draw_line(x: int, y: int, length: int, char: chr) -> None:
+    """
+    Draw a line
+    :param x: x position
+    :param y: y position
+    :param length: length of the line
+    :param char: character to use
+    :return: None
+    """
     write_at(x, y, char * length)
 
 
-def draw_column(x, y, height, char):
+def draw_column(x: int, y: int, height: int, char: chr) -> None:
+    """
+    Draw a column
+    :param x: x position
+    :param y: y position
+    :param height: height of the column
+    :param char: character to use
+    :return: None
+    """
     vertical_write_at(x, y, char * height)
 
 
-def draw_rectangle(x, y, width, height, char):
+def draw_rectangle(x: int, y: int, width: int, height: int, char: chr) -> None:
+    """
+    Draw a rectangle
+    :param x: x position
+    :param y: y position
+    :param width: width of the rectangle
+    :param height: height of the rectangle
+    :param char: character to use
+    :return: None
+    """
     draw_line(x, y, width, char)
     draw_line(x, y + height - 1, width, char)
     draw_column(x, y, height, char)
     draw_column(x + width - 1, y, height, char)  # fix the opposite corner of the rectangle
 
 
-def draw_filled_rectangle(x, y, width, height, char):
+def draw_filled_rectangle(x: int, y: int, width: int, height: int, char: chr) -> None:
+    """
+    Draw a filled rectangle
+    :param x: x position
+    :param y: y position
+    :param width: width of the rectangle
+    :param height: height of the rectangle
+    :param char: character to use
+    :return: None
+    """
     for i in range(height):
         draw_line(x, y + i, width, char)
 
 
-def compile_buffer():
+def compile_buffer() -> None:
+    """
+    Compile the buffer to a string (optimize the buffer)
+    :return: None
+    """
     global buffer
     last_color = ""
     for i in range(len(buffer)):
@@ -161,7 +287,13 @@ def compile_buffer():
                 buffer[i][j] = buffer[i][j][color_code_lenght + 1:]
 
 
-def _extract_color_from_buffer_cell(x, y):
+def _extract_color_from_buffer_cell(x: int, y: int) -> tuple:
+    """
+    Extract the color data from a buffer cell
+    :param x: x position
+    :param y: y position
+    :return: end index of the color code, color code
+    """
     global buffer
     color = buffer[y][x]
     in_color = False
@@ -185,7 +317,11 @@ __should_stop_key_reader_thread__ = False
 __should_stop_key_flusher_thread__ = False
 
 
-def wait_for_key():
+def wait_for_key() -> chr:
+    """
+    Wait for a key to be pressed
+    :return: key pressed
+    """
     key = msvcrt.getch()
     if key == b'\xe0':
         key = msvcrt.getch()
@@ -200,12 +336,20 @@ def wait_for_key():
     return key
 
 
-def get_key():
+def get_key() -> chr:
+    """
+    Get the last key pressed
+    :return: key pressed
+    """
     if msvcrt.kbhit():
         return wait_for_key()
 
 
-def __get_keys_task__():
+def __get_keys_task__() -> None:
+    """
+    Loop to get the keys
+    :return: None
+    """
     global pressed_key
     while True:
         key = get_key()
@@ -215,12 +359,21 @@ def __get_keys_task__():
             break
 
 
-def flush_keys():
+def flush_keys() -> None:
+    """
+    Flush the pressed keys
+    :return: None
+    """
     global pressed_key
     pressed_key = []
 
 
-def __flush_keys_task__(interval):
+def __flush_keys_task__(interval: int) -> None:
+    """
+    Loop to flush the keys
+    :param interval: interval between each flush in seconds
+    :return: None
+    """
     while True:
         flush_keys()
         time.sleep(interval)
@@ -228,12 +381,21 @@ def __flush_keys_task__(interval):
             break
 
 
-def get_pressed_key():
+def get_pressed_key() -> list:
+    """
+    Get the pressed key
+    :return: pressed key
+    """
     global pressed_key
     return pressed_key
 
 
-def is_key_pressed(key):
+def is_keycode_pressed(key: str) -> bool:
+    """
+    Check if a key is pressed
+    :param key: key to check
+    :return: True if the key is pressed, False otherwise
+    """
     global pressed_key
     return key in pressed_key
 
@@ -242,12 +404,21 @@ __key_reader_thread__ = threading.Thread(target=__get_keys_task__)
 __key_flusher_thread__ = threading.Thread(target=__flush_keys_task__, args=(0.1,))
 
 
-def start_async_key_listener():
+def start_async_key_listener() -> None:
+    """
+    Start the async key listener
+    :return: None
+    """
     global __key_reader_thread__
     __key_reader_thread__ = threading.Thread(target=__get_keys_task__)
     __key_reader_thread__.start()
 
-def stop_async_key_listener():
+
+def stop_async_key_listener() -> None:
+    """
+    Stop the async key listener
+    :return: None
+    """
     global __should_stop_key_flusher_thread__
     global __should_stop_key_reader_thread__
 
@@ -261,7 +432,13 @@ def stop_async_key_listener():
         __key_flusher_thread__.join()
         __should_stop_key_flusher_thread__ = False
 
-def set_async_key_listener_interval(interval):
+
+def set_async_key_listener_interval(interval: int) -> None:
+    """
+    Set the interval between each key flush
+    :param interval: interval in seconds
+    :return: None
+    """
     global __key_flusher_thread__
     global __should_stop_key_flusher_thread__
 
@@ -275,7 +452,12 @@ def set_async_key_listener_interval(interval):
     __key_flusher_thread__.start()
 
 
-def _get_key_code_(key):
+def _get_key_code_(key: str) -> chr:
+    """
+    Get the key code
+    :param key: key to get the code
+    :return: key code
+    """
     if key == "up":
         return b'up'
     elif key == "down":
@@ -298,6 +480,11 @@ def _get_key_code_(key):
         return key
 
 
-def is_key_pressed(key):
+def is_key_pressed(key: str) -> bool:
+    """
+    Check if a key is pressed
+    :param key:
+    :return:
+    """
     global pressed_key
     return _get_key_code_(key) in pressed_key

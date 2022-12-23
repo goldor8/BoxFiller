@@ -8,7 +8,13 @@ from Display import termilib
 from Display.viewBufferUtil import *
 
 
-def show_board(play_grid, blocks):
+def show_board(play_grid: list, blocks: list) -> None:
+    """
+    show the main information of the game
+    :param play_grid: the grid to display
+    :param blocks: the blocks to display
+    :return: None (only display the grid and the blocks)
+    """
     grid_view = []
     x_pos = 5
     y_pos = 2
@@ -55,7 +61,11 @@ def show_board(play_grid, blocks):
     termilib.flush()
 
 
-def select_grid_type():
+def select_grid_type() -> int:
+    """
+    ask user to select a grid type
+    :return: the grid type selected (0 = circle, 1 = triangle, 2 = lozenge)
+    """
     grid_type = 0
     while True:
         draw_select_grid_type(grid_type)
@@ -105,7 +115,11 @@ def draw_select_grid_type(grid_type):
     termilib.flush()
 
 
-def select_grid_size():
+def select_grid_size() -> int:
+    """
+    ask user to select a grid size
+    :return: the grid size selected
+    """
     grid_size = 0
     while True:
         draw_selected_grid_size(grid_size)
@@ -160,7 +174,11 @@ def draw_selected_grid_size(grid_size):
     termilib.flush()
 
 
-def menu():
+def menu() -> int:
+    """
+    show the user a menu and ask to choose play or show rules option
+    :return: the option selected (0 = play, 1 = show rules)
+    """
     termilib.set_terminal_size(150, 40)
     termilib.start_async_key_listener()
     selection = 0
@@ -195,12 +213,21 @@ def draw_menu(selectedChoice):
     termilib.flush()
 
 
-def show_rules():
+def show_rules() -> None:
+    """
+    show the rules to the user
+    :return: None (only display the rules)
+    """
     # todo
     return
 
 
-def get_input_not_parsed(text):
+def get_input_not_parsed(text: str) -> str:
+    """
+    get input from different display system
+    :param text: the text to display
+    :return: the input from the user
+    """
     termilib.stop_async_key_listener()
     input_text = input(text)
     termilib.start_async_key_listener()

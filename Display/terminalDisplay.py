@@ -10,7 +10,13 @@ from Display.viewBufferUtil import *
 from main import get_input
 
 
-def show_board(play_grid, blocks):
+def show_board(play_grid: list, blocks: list) -> None:
+    """
+    show the main information of the game
+    :param play_grid: the grid to display
+    :param blocks: the blocks to display
+    :return: None (only display the grid and the blocks)
+    """
     grid_view, block_view = [], []
     prepare_block_view(blocks, 50, block_view)
     prepare_grid_view(play_grid, grid_view)
@@ -126,7 +132,11 @@ def prepare_block_view(blocks, max_lenght, block_view):
         add_to_view(" " * before_space + block_number_text + after_space * " ", block_view)
 
 
-def select_grid_type():
+def select_grid_type() -> int:
+    """
+    ask user to select a grid type
+    :return: the grid type selected (0 = circle, 1 = triangle, 2 = lozenge)
+    """
     print("Select grid type :")
     print("1. Circle")
     print("2. Triangle")
@@ -136,14 +146,22 @@ def select_grid_type():
     return int(grid_type) - 1
 
 
-def select_grid_size():
+def select_grid_size() -> int:
+    """
+    ask user to select a grid size
+    :return: the grid size selected
+    """
     print("Select grid odd size between 21 and 25 : ")
 
     grid_size = get_valid_int_input("Enter your choice : ", lambda x: x in range(21, 27) and x % 2 == 1)
     return grid_size
 
 
-def menu():
+def menu() -> int:
+    """
+    show the user a menu and ask to choose play or show rules option
+    :return: the option selected (0 = play, 1 = show rules)
+    """
     print("Select what you want to do")
     print("1. Play")
     print("2. Show rules")
@@ -152,7 +170,11 @@ def menu():
     return choice
 
 
-def show_rules():
+def show_rules() -> None:
+    """
+    show the rules to the user
+    :return: None (only display the rules)
+    """
     rules = open("Regles.txt", "r", encoding="utf-8")
     rules_lines = rules.readlines()
     for line in rules_lines:
@@ -162,11 +184,22 @@ def show_rules():
     get_input_not_parsed("Press any key to continue")
 
 
-def get_input_not_parsed(text="Press any key to continue"):
+def get_input_not_parsed(text: str) -> str:
+    """
+    get input from different display system
+    :param text: the text to display
+    :return: the input from the user
+    """
     return input(text)
 
 
-def select_block_position(play_grid, selected_block):
+def select_block_position(play_grid: list, selected_block: list) -> tuple:
+    """
+    ask user to select a block position
+    :param play_grid: the grid to play on
+    :param selected_block: the block to place
+    :return: the position selected (x, y)
+    """
     def is_input_in_valid_format(input_text):
         return len(input_text) == 2 and input_text[0] in string.ascii_uppercase and input_text[1] in string.ascii_lowercase
 
@@ -181,14 +214,24 @@ def select_block_position(play_grid, selected_block):
     return get_position_from_position_input(block_position)
 
 
-def select_block(list_blocks):
+def select_block(round_blocks: list) -> int:
+    """
+    ask user to select a block
+    :param round_blocks: the blocks to choose from
+    :return: the index of block selected
+    """
     num_block = 0
-    while (num_block < 1) or (num_block > len(list_blocks)):
-        num_block = get_valid_int_input("Enter block number : ", lambda x: x in range(1, len(list_blocks) + 1))
+    while (num_block < 1) or (num_block > len(round_blocks)):
+        num_block = get_valid_int_input("Enter block number : ", lambda x: x in range(1, len(round_blocks) + 1))
     return num_block - 1
 
 
-def select_block_rotation(selected_block):
+def select_block_rotation(selected_block: list) -> list:
+    """
+    ask user to select a block rotation
+    :param selected_block: the block to rotate
+    :return: the rotated block
+    """
     show_current_block(selected_block)
     input_text = get_input("Enter 'y' or 'n'/nothing to rotate or not the block: ")
     while input_text != "" and input_text != "y" and input_text != "n":
@@ -212,7 +255,12 @@ def show_current_block(block):
         print()
 
 
-def show_game_over(score):
+def show_game_over(score: int) -> None:
+    """
+    show the game over screen
+    :param score: the score of the player
+    :return: None (only display the game over screen)
+    """
     print("Game over !")
     print("Your score is : " + str(score))
     get_input("Press any key to continue")
@@ -229,7 +277,11 @@ def get_valid_int_input(text, valid_expression_lambda):
     return int(input_text)
 
 
-def select_block_picking_manner():
+def select_block_picking_manner() -> int:
+    """
+    ask user to select a block picking manner
+    :return: the block picking manner selected (0 = all block, 1 = 3 random blocks)
+    """
     block_picking_way = 0
     print("Select block picking manner:")
     print("1. Show all blocks")
