@@ -220,3 +220,13 @@ def get_valid_int_input(text, valid_expression_lambda):
         print("Invalid integer !")
         input_text = get_input(text)
     return int(input_text)
+
+
+def select_block_picking_manner():
+    block_picking_way = 0
+    print("Select block picking manner:")
+    print("1. Show all blocks")
+    print("2. Show 3 random blocks from all blocks")
+    while block_picking_way != 1 and block_picking_way != 2:
+        block_picking_way = get_valid_int_input("Enter your choice : ", lambda x: x in [1, 2])
+    return block_picking_way - 1

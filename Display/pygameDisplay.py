@@ -234,6 +234,63 @@ def select_grid_size():
         pygame.display.flip()
 
 
+def select_block_picking_manner():
+    global screen
+    global large_font
+
+    while True:
+        title_surf = title_font.render('Select Block Picking Way', True, text_color)
+        title_rect = title_surf.get_rect()
+        title_rect.center = (400, 100)
+        random_surf = large_font.render('Show all blocks', True, text_color)
+        random_rect = random_surf.get_rect()
+        random_rect.center = (400, 300)
+        sequential_surf = large_font.render('Show 3 random blocks from all blocks', True, text_color)
+        sequential_rect = sequential_surf.get_rect()
+        sequential_rect.center = (400, 400)
+
+        choice = 0
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit(0)
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        choice -= 1
+                    elif event.key == pygame.K_DOWN:
+                        choice += 1
+                    elif event.key == pygame.K_RETURN:
+                        return choice
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        return choice
+            if choice < 0:
+                choice = 1
+            elif choice > 1:
+                choice = 0
+
+            if is_mouse_on_rect(pygame.mouse.get_pos(), random_rect):
+                choice = 0
+            elif is_mouse_on_rect(pygame.mouse.get_pos(), sequential_rect):
+                choice = 1
+
+            screen.fill(background_color)
+            screen.blit(title_surf, title_rect)
+
+            if choice == 0:
+                pygame.draw.rect(screen, secondary_color, random_rect)
+
+            elif choice == 1:
+                pygame.draw.rect(screen, secondary_color, sequential_rect)
+
+            screen.blit(random_surf, random_rect)
+            screen.blit(sequential_surf, sequential_rect)
+
+            pygame.display.flip()
+
+
 def draw_grid(play_grid, offset_x, offset_y):
     for y in range(0, len(play_grid)):
         for x in range(0, len(play_grid[y])):

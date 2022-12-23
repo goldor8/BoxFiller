@@ -109,8 +109,10 @@ def show_game_over(score):  # show game over screen
         terminalDisplay.show_game_over(score)
 
 
-def select_block_picking_way():
-    block_picking_way = 0
-    while block_picking_way != 1 and block_picking_way != 2:
-        block_picking_way = int(input("choose if you want to play with 3 random blocks or all the blocks : "))
-    return block_picking_way
+def select_block_picking_manner():  # ask user to select a block picking manner
+    if use_termilib:
+        return termilibDisplay.select_block_picking_manner()
+    elif use_pygame:
+        return pygameDisplay.select_block_picking_manner()
+    else:
+        return terminalDisplay.select_block_picking_manner()
