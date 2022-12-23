@@ -75,7 +75,7 @@ def play_loop() -> None:
     selected_block_index = proxy.select_block(round_blocks)
     round_blocks[selected_block_index] = proxy.select_block_rotation(round_blocks[selected_block_index])
     position_x, position_y = proxy.select_block_position(play_grid, round_blocks[selected_block_index])
-    while not can_emplace_block(play_grid, round_blocks[selected_block_index], position_x, position_y):
+    while not can_emplace_block(play_grid, round_blocks[selected_block_index], position_x, position_y - (len(round_blocks[selected_block_index]) - 1)):
         global lives
         lives -= 1
         if lives == 0:
@@ -85,7 +85,7 @@ def play_loop() -> None:
         print("Invalid position ! You have " + str(lives) + " tries left")
         position_x, position_y = proxy.select_block_position(play_grid, round_blocks[selected_block_index])
 
-    emplace_block(play_grid, round_blocks[selected_block_index], position_x, position_y)
+    emplace_block(play_grid, round_blocks[selected_block_index], position_x, position_y - (len(round_blocks[selected_block_index]) - 1))
 
     broken_squares = check_for_full_row_or_column(play_grid)
 

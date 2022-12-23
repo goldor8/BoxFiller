@@ -12,15 +12,11 @@ def load_block(path: str) -> list:
     :param path: path to the file
     :return: the block contained in the file
     """
-    block = []
-    with open(path, "r") as block_1:
-        lines = block_1.readlines()
-        for i in range(len(lines)):
-            block.append([])
-            line_numbers = lines[i].split(" ")
-            for number in line_numbers:
-                block[i].append(int(number))
-    return block
+    with open("Level/Blocks/" + path, 'r') as f:
+        block = []
+        for line in f:
+            block.append([int(x) for x in line.split(" ")])
+        return block
 
 
 def rotate_block(block: list) -> list:
@@ -111,13 +107,13 @@ def get_block_paths_for_board_choice(choice: int) -> list:
     :param choice: the choice of board (0 = circle, 1 = triangle, 2 = lozenge)
     :return: the paths of blocks corresponding to the choice of board
     """
-    grid_blocks = ["Level/Blocks/common/" + i for i in os.listdir("Level/Blocks/common")]
+    grid_blocks = ["common/" + i for i in os.listdir("Level/Blocks/common")]
     if choice == 0:
-        grid_blocks += ["Level/Blocks/circle/" + i for i in os.listdir("Level/Blocks/circle")]
+        grid_blocks += ["circle/" + i for i in os.listdir("Level/Blocks/circle")]
     elif choice == 1:
-        grid_blocks += ["Level/Blocks/triangle/" + i for i in os.listdir("Level/Blocks/triangle")]
+        grid_blocks += ["triangle/" + i for i in os.listdir("Level/Blocks/triangle")]
     elif choice == 2:
-        grid_blocks += ["Level/Blocks/lozenge/" + i for i in os.listdir("Level/Blocks/lozenge")]
+        grid_blocks += ["lozenge/" + i for i in os.listdir("Level/Blocks/lozenge")]
     return grid_blocks
 
 

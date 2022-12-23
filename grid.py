@@ -12,7 +12,7 @@ def save_grid(grid: list, file_path: str) -> None:
     :param file_path: the path of the file
     :return: None
     """
-    with open(file_path, 'w') as f:
+    with open("Level/Saves/" + file_path, 'w') as f:
         for y in range(len(grid)):
             f.write(" ".join([str(x) for x in grid[y]]) + "\n")
 
@@ -23,7 +23,7 @@ def load_grid(file_path: str) -> list:
     :param file_path: the path of the file
     :return: the grid
     """
-    with open(file_path, 'r') as f:
+    with open("Level/Saves/" + file_path, 'r') as f:
         grid = []
         for line in f:
             grid.append([int(x) for x in line.split(" ")])
@@ -105,13 +105,10 @@ def can_emplace_block(grid: list, block: list, x: int, y: int) -> bool:
     :param y: y position
     :return: True if the block can be placed, False otherwise
     """
+
     for i in range(len(block)):
         for j in range(len(block[i])):
-            if not is_in_grid(grid, x + j, y - len(block) + 1 + i):
-                return False
-            if block[i][j] == 1 and not is_empty(grid, x + j, y - len(block) + 1 + i):
-                return False
-            if grid[y - len(block) + 1 + i][x + j] == 2 and block[i][j] == 1:
+            if block[i][j] == 1 and not is_in_grid_and_empty(grid, x + j, y + i):
                 return False
     return True
 
@@ -128,24 +125,66 @@ def emplace_block(grid: list, block: list, x: int, y: int) -> None:
     for i in range(len(block)):
         for j in range(len(block[i])):
             if block[i][j] == 1:
-                grid[y - len(block) + 1 + i][x + j] = 2
+                grid[y + i][x + j] = 2
 
 
-def is_column_full(grid, x):  # check if the column is full
+def is_column_full(grid: list, x: int) -> bool:
+    """
+    Check if the column is full
+    :param grid: the grid to check
+    :param x: the column index to check
+    :return: True if the column is full, False otherwise
+    """
     for y in range(len(grid)):
         if grid[y][x] == 1:
             return False
     return True
 
 
-def is_row_full(grid, y):  # check if the row is full
+def is_row_full(grid: list, y: int) -> bool:
+    """
+    Check if the row is full
+    :param grid: the grid to check
+    :param y: the row index to check
+    :return: True if the row is full, False otherwise
+    """
     for x in range(len(grid[y])):
         if grid[y][x] == 1:
             return False
     return True
 
 
-def bring_cube_down_from_column_index(grid, row_index):  # bring the cube down from the row index
+def empty_column(grid: list, x: int) -> None:
+    """
+    Empty a column
+    :param grid: the grid to empty
+    :param x: the column index to empty
+    :return: None (the grid is modified by reference)
+    """
+    for y in range(len(grid)):
+        if grid[y][x] == 2:
+            grid[y][x] = 1
+
+
+def empty_row(grid: list, y: int) -> None:
+    """
+    Empty a row
+    :param grid: the grid to empty
+    :param y: the row index to empty
+    :return: None (the grid is modified by reference)
+    """
+    for x in range(len(grid[y])):
+        if grid[y][x] == 2:
+            grid[y][x] = 1
+
+
+def bring_cube_down_from_column_index(grid: list, row_index: int) -> None:
+    """
+    Bring the cube down from the row index
+    :param grid: the grid to modify
+    :param row_index: the row index to start from
+    :return: None (the grid is modified by reference)
+    """
     if row_index < 0 or row_index > len(grid[0]) - 1:
         return
     for y in range(row_index, 0, -1):
@@ -155,38 +194,12 @@ def bring_cube_down_from_column_index(grid, row_index):  # bring the cube down f
                 grid[y - 1][x] = 1
 
 
-def fill_column(grid, x):  # fill a column
-    for y in range(len(grid)):
-        if grid[y][x] == 1:
-            grid[y][x] = 2
-
-
-def empty_column(grid, x):  # empty a column
-    for y in range(len(grid)):
-        if grid[y][x] == 2:
-            grid[y][x] = 1
-
-
-def fill_row(grid, y):  # fill a row
-    for x in range(len(grid[y])):
-        if grid[y][x] == 1:
-            grid[y][x] = 2
-
-
-def empty_row(grid, y):  # empty a row
-    for x in range(len(grid[y])):
-        if grid[y][x] == 2:
-            grid[y][x] = 1
-
-
-def fill_all_grid(grid):  # fill the grid (used for the test)
-    for y in range(len(grid)):
-        for x in range(len(grid[y])):
-            if grid[y][x] == 1:
-                grid[y][x] = 2
-
-
-def check_for_full_row_or_column(grid):  # check if there is full rows or columns and remove them
+def check_for_full_row_or_column(grid: list) -> int:
+    """
+    Check if there is full rows or columns and remove them
+    :param grid: the grid to check
+    :return: return the number of squares removed
+    """
     broken_squares = 0
     for y in range(0, len(grid)):
         while is_row_full(grid, y):  # while loop because fallen squares can fill the actual line
@@ -201,16 +214,37 @@ def check_for_full_row_or_column(grid):  # check if there is full rows or column
     return broken_squares
 
 
-def is_in_grid(grid, x, y):  # check if the position is in the grid
+def is_in_grid(grid: list, x: int, y: int) -> bool:
+    """
+    Check if the position is in the grid
+    :param grid: the grid to check
+    :param x: x position
+    :param y: y position
+    :return: True if the position is in the grid, False otherwise
+    """
     return 0 <= x < len(grid[0]) and 0 <= y < len(grid)
 
 
-def is_empty(grid, x, y):  # check if the position is empty
+def is_empty(grid: list, x: int, y: int) -> bool:
+    """
+    Check if the position is empty
+    :param grid: the grid to check
+    :param x: x position
+    :param y: y position
+    :return: True if the position is empty, False otherwise
+    """
     b = grid[y][x] == 1
     return b
 
 
-def is_in_grid_and_empty(grid, x, y):  # check if the position is in the grid and empty
+def is_in_grid_and_empty(grid: list, x: int, y: int) -> bool:
+    """
+    Check if the position is in the grid and empty
+    :param grid: the grid to check
+    :param x: x position
+    :param y: y position
+    :return: True if the position is in the grid and empty, False otherwise
+    """
     return is_in_grid(grid, x, y) and is_empty(grid, x, y)
 
 
