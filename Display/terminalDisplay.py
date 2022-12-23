@@ -1,4 +1,8 @@
-# display module for basic terminal
+"""
+Project : BoxFiller
+Description : Display functions when using the console
+Author : Brisset Dimitri, Occhiminuti Marius
+"""
 
 import string
 import block
@@ -8,7 +12,7 @@ from main import get_input
 
 def show_board(play_grid, blocks):
     grid_view, block_view = [], []
-    prepare_block_view(blocks, 30, 3, block_view)
+    prepare_block_view(blocks, 50, block_view)
     prepare_grid_view(play_grid, grid_view)
 
     max_column = len(grid_view)
@@ -35,7 +39,7 @@ def print_grid(play_grid):
 
 def print_blocks(blocks):
     blocks_view = []
-    prepare_block_view(blocks, 30, 3, blocks_view)
+    prepare_block_view(blocks, 50, blocks_view)
     for i in range(0, len(blocks_view)):
         print(blocks_view[i])
 
@@ -79,8 +83,10 @@ def prepare_grid_view(play_grid, grid_view):  # Store the grid display in a list
 
 
 # Store the block display in a list of string
-def prepare_block_view(blocks, max_lenght, block_size, block_view):
+def prepare_block_view(blocks, max_lenght, block_view):
     clear_view(block_view)
+
+    block_size = len(blocks[0][0])
 
     block_per_line = int((max_lenght - 3) / (block_size + 2))  # compute the number of block per line
     block_line_index = -1  # init at -1 to increment at the first loop
@@ -112,11 +118,12 @@ def prepare_block_view(blocks, max_lenght, block_size, block_view):
 
             increment_view_line()
 
-        # add block number under the block
+        # add block number under the blocks
         block_number_text = str(blockIndex + 1)
-        before_space = int((block_size * 3 - len(block_number_text)) / 2) + 1
-        after_space = block_size * 3 - len(block_number_text) - before_space + 1
-        add_to_view(" " * before_space + block_number_text + after_space * " " + " ", block_view)
+        block_size_in_space = block_size * 3
+        before_space = int((block_size_in_space - len(block_number_text) + 1) / 2)
+        after_space = block_size_in_space + 1 - int(len(block_number_text) / 2) - before_space
+        add_to_view(" " * before_space + block_number_text + after_space * " ", block_view)
 
 
 def select_grid_type():

@@ -1,13 +1,22 @@
-# grid management module
+"""
+Project : BoxFiller
+Description : This module is used to generate and manipulate a grid
+Author : Brisset Dimitri, Occhiminuti Marius
+"""
+
 
 def save_grid(grid, file_path):  # save the grid in a file at the path specified
     with open(file_path, 'w') as f:
-        for x in range(len(grid)):
-            for y in range(len(grid[x]) - 1):
-                f.write(str(grid[x][y]))
-                f.write(' ')
-            f.write(str(grid[x][len(grid[x]) - 1]))
-            f.write("\n")
+        for y in range(len(grid)):
+            f.write(" ".join([str(x) for x in grid[y]]) + "\n")
+
+
+def load_grid(file_path):  # load the grid from a file at the path specified
+    with open(file_path, 'r') as f:
+        grid = []
+        for line in f:
+            grid.append([int(x) for x in line.split(" ")])
+        return grid
 
 
 def create_circle_grid(size):  # create a grid with a circle shape

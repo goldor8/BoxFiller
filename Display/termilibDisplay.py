@@ -1,7 +1,10 @@
-# display module for termilib
+"""
+Project : BoxFiller
+Description : Display functions when using termilib
+Author : Brisset Dimitri
+"""
 
 from Display import termilib
-from main import get_input
 from Display.viewBufferUtil import *
 
 

@@ -1,4 +1,8 @@
-# library to use the terminal
+"""
+Project : BoxFiller
+Description : Library to use the terminal
+Author : Brisset Dimitri
+"""
 
 import os
 import msvcrt

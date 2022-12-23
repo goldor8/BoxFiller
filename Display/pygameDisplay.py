@@ -1,4 +1,8 @@
-# display module for pygame
+"""
+Project : BoxFiller
+Description : Display functions when using pygame
+Author : Brisset Dimitri
+"""
 
 import pygame
 import grid
@@ -34,7 +38,7 @@ def init_display():
     global screen
     global title_font
     global large_font
-    screen = pygame.display.set_mode((800, 600))
+    screen = pygame.display.set_mode((1200, 800))
     title_font = pygame.font.Font(None, 80)
     large_font = pygame.font.Font(None, 50)
     pygame.display.set_caption('Game')
@@ -359,19 +363,13 @@ def show_board(play_grid, blocks):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     mouse_x, mouse_y = event.pos
-                    selected_block, grab_x_offset, grab_y_offset = get_block_index_mouse_on(mouse_x, mouse_y, blocks,
-                                                                                            60 + len(play_grid[
-                                                                                                         0] * square_size),
-                                                                                            30, 400)
+                    selected_block, grab_x_offset, grab_y_offset = get_block_index_mouse_on(mouse_x, mouse_y, blocks, 60 + len(play_grid[0] * square_size), 30, 600)
             elif event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
                     if selected_block != -1:
                         mouse_x, mouse_y = event.pos
                         global block_position
-                        grid_coord = get_grid_rounded_coord_mouse_on(play_grid, mouse_x - grab_x_offset,
-                                                                     mouse_y - grab_y_offset + (len(
-                                                                         blocks[selected_block]) - 1) * square_size,
-                                                                     grid_x_offset, grid_y_offset)
+                        grid_coord = get_grid_rounded_coord_mouse_on(play_grid, mouse_x - grab_x_offset, mouse_y - grab_y_offset + (len(blocks[selected_block]) - 1) * square_size, grid_x_offset, grid_y_offset)
                         print(grid_coord)
                         if grid.is_in_grid(play_grid, grid_coord[0], grid_coord[1]):
                             block_position = grid_coord
@@ -394,7 +392,7 @@ def show_board(play_grid, blocks):
         screen.fill(background_color)
 
         draw_grid(play_grid, grid_x_offset, grid_y_offset)
-        draw_available_blocks(blocks, 60 + len(play_grid[0] * square_size), 30, 400, selected_block)
+        draw_available_blocks(blocks, 60 + len(play_grid[0] * square_size), 30, 600, selected_block)
         if selected_block != -1:
             draw_block(blocks[selected_block], mouse_x - grab_x_offset, mouse_y - grab_y_offset)
 

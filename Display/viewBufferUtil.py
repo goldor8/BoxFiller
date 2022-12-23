@@ -1,4 +1,8 @@
-# utility module for display using a view buffer (list of string)
+"""
+Project : BoxFiller
+Description : Utility module for display using a view buffer (list of string)
+Author : Brisset Dimitri
+"""
 
 viewLine = 0
 

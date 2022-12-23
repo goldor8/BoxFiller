@@ -1,4 +1,8 @@
-# proxy used to redirect the calls to the right display
+"""
+Project : BoxFiller
+Description : This module is used to redirect the display to the right display system
+Author : Brisset Dimitri, Occhiminuti Marius
+"""
 
 import Display.termilibDisplay as termilibDisplay
 import Display.terminalDisplay as terminalDisplay
