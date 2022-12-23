@@ -146,13 +146,13 @@ def is_row_full(grid, y):  # check if the row is full
 
 
 def bring_cube_down_from_column_index(grid, row_index):  # bring the cube down from the row index
-    if row_index < 0 or row_index >= len(grid[0]) - 1:
+    if row_index < 0 or row_index > len(grid[0]) - 1:
         return
-    for y in range(row_index, -1, -1):
+    for y in range(row_index, 0, -1):
         for x in range(len(grid)):
-            if grid[y + 1][x] == 1 and grid[y][x] == 2:
-                grid[y + 1][x] = 2
-                grid[y][x] = 1
+            if grid[y][x] == 1 and grid[y - 1][x] == 2:
+                grid[y][x] = 2
+                grid[y - 1][x] = 1
 
 
 def fill_column(grid, x):  # fill a column
@@ -189,14 +189,14 @@ def fill_all_grid(grid):  # fill the grid (used for the test)
 def check_for_full_row_or_column(grid):  # check if there is full rows or columns and remove them
     broken_squares = 0
     for y in range(0, len(grid)):
-        if is_row_full(grid, y):  # fallen squares can fill the line
+        while is_row_full(grid, y):  # while loop because fallen squares can fill the actual line
+            broken_squares += sum([1 if grid[y][x] == 2 else 0 for x in range(len(grid[y]))])
             empty_row(grid, y)
-            broken_squares += len(grid[y])
             bring_cube_down_from_column_index(grid, y)
     for x in range(len(grid[0])):
         if is_column_full(grid, x):
+            broken_squares += sum([1 if grid[y][x] == 2 else 0 for y in range(len(grid))])
             empty_column(grid, x)
-            broken_squares += len(grid)
 
     return broken_squares
 
