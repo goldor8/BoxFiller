@@ -26,7 +26,7 @@ To run the game in terminal just run the main.py file.
 
 `py main.py`
 
-To run the game in custom terminal you to run the main.py file with "termilib" keyword argument after "--display" or "-d" argument.
+To run the game in custom terminal you to run the main.py file with "termilib" keyword argument after "--display" or "-d" argument. (deprecated this display is only supported on windows and some features are missing causing errors)
 
 `py main.py --display termilib`
 
@@ -35,3 +35,7 @@ To run the game in pygame you have to install pygame and run the main.py file wi
 `py -m pip install pygame`
 
 `py main.py --display pygame`
+
+## *Authors*
+
+*Brisset Dimitri - Occhiminutie Marius*
