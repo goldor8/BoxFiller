@@ -4,7 +4,13 @@ Description : This module is used to load and manipulate blocks
 Author : Brisset Dimitri, Occhiminuti Marius
 """
 
-def load_block(path):  # returns a block from a file
+
+def load_block(path: str) -> list:
+    """
+    Load a block from a file
+    :param path: path to the file
+    :return: the block contained in the file
+    """
     block = []
     with open(path, "r") as block_1:
         lines = block_1.readlines()
@@ -16,7 +22,14 @@ def load_block(path):  # returns a block from a file
     return block
 
 
-def rotate_block(block):  # rotate block by 90°
+def rotate_block(block: list) -> list:
+    """
+    Rotate a block by 90° 
+    :param block: the block to rotate
+    :return: the rotated block
+    """
+
+    # the block is wrapped when rotated to let the block in the bottom left corner
     initial_size = len(block)
     wrapped_block = block.copy()
     wrap_block(wrapped_block)
@@ -32,7 +45,12 @@ def rotate_block(block):  # rotate block by 90°
     return rotated_block
 
 
-def normalize_block_list(block_list):  # put all block at the same size
+def normalize_block_list(block_list: list):
+    """
+    Normalize a list of blocks to the same size
+    :param block_list: the list of blocks to normalize
+    :return: list is modified by reference
+    """
     max_side = 0
     for block in block_list:
         if len(block) > max_side:
@@ -43,7 +61,14 @@ def normalize_block_list(block_list):  # put all block at the same size
         normalize_block(block_list[i], max_side, max_side)
 
 
-def normalize_block(block, height, width):  # set a block to a given size filling with 0
+def normalize_block(block: list, height: int, width: int):
+    """
+    Normalize a block to a given size (add empty lines and columns)
+    :param block: block to normalize
+    :param height: height of the normalized block
+    :param width: width of the normalized block
+    :return: the block is modified by reference
+    """
     initial_height = len(block)
     initial_width = len(block[0])
     for i in range(height - initial_height):
@@ -53,7 +78,12 @@ def normalize_block(block, height, width):  # set a block to a given size fillin
             block[i].append(0)
 
 
-def wrap_block(block):  # wrap a block in a list (remove entirely empty lines and columns)
+def wrap_block(block: list):
+    """
+    Wrap a block in a list (remove entirely empty lines and columns)
+    :param block: the block to wrap
+    :return: the block is modified by reference
+    """
     # remove empty lines
     i = 0
     while i < len(block):
@@ -68,7 +98,7 @@ def wrap_block(block):  # wrap a block in a list (remove entirely empty lines an
     width = len(block[0])
     for i in range(width-1, -1, -1):  # reverse loop because we remove only last empty columns elements
         if sum([block[j][i] for j in range(len(block))]) == 0:
-            for j in range(len(block) - 1, -1, -1):  # reverse loop to avoid index error because of pop
+            for j in range(len(block)):  # reverse loop to avoid index error because of pop
                 block[j].pop(i)
         else:
             break
