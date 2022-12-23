@@ -1,18 +1,22 @@
 # proxy used to redirect the calls to the right display
 
-from main import display_name
+import Display.termilibDisplay as termilibDisplay
+import Display.terminalDisplay as terminalDisplay
+try:
+    import Display.pygameDisplay as pygameDisplay
+except ModuleNotFoundError:
+    print("pygame is not installed. You can't run the pygame version of this game.")
 
 use_termilib = False
 use_pygame = False
 
-if display_name == "termilib":
-    use_termilib = True
-    import Display.termilibDisplay as termilibDisplay
-elif display_name == "pygame":
-    use_pygame = True
-    import Display.pygameDisplay as pygameDisplay
-else:
-    import Display.terminalDisplay as terminalDisplay
+
+def init_display(display_type):  # set the display to use
+    global use_termilib, use_pygame
+    if display_type == "termilib":
+        use_termilib = True
+    elif display_type == "pygame":
+        use_pygame = True
 
 
 def show_board(play_grid, blocks):  # show the main information of the game

@@ -6,16 +6,7 @@ from grid import *
 import Display.proxy as proxy  # different proxy import to avoid strange import errors
 from block import *
 
-display_name = ""
-
-if __name__ == "__main__":
-    arg_count = len(sys.argv)
-    for i in range(arg_count):
-        if (sys.argv[i] == "-d" or sys.argv[i] == "--display") and i + 1 <= arg_count:
-            display_name = sys.argv[i + 1]
-            break
-
-from Display.proxy import *
+import Display.proxy as proxy  # different proxy import to avoid strange import errors
 
 play_grid = []  # represents the grid on which the player is playing
 
@@ -155,4 +146,11 @@ def parse_essential_commands(
 
 
 if __name__ == "__main__":
+    display_name = ""
+    arg_count = len(sys.argv)
+    for i in range(arg_count):
+        if (sys.argv[i] == "-d" or sys.argv[i] == "--display") and i + 1 <= arg_count:
+            display_name = sys.argv[i + 1]
+            break
+    proxy.init_display(display_name)
     main()
