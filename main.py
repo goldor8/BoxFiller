@@ -7,16 +7,14 @@ Author : Brisset Dimitri, Occhiminuti Marius
 import sys
 import os
 import random
+import Display.proxy as proxy
 
 from grid import *
 from block import *
 
-import Display.proxy as proxy  # different proxy import to avoid strange import errors
 
 play_grid = []  # represents the grid on which the player is playing
-
-stock_blocks = [[[0, 0, 1], [0, 1, 1], [1, 1, 1]], [[0, 1, 0], [1, 1, 1], [0, 1, 0]],
-                [[1, 1, 1], [1, 1, 1], [1, 1, 1]]] * 5
+stock_blocks = []  # all blocks available for the grid shape
 round_blocks = []  # blocks that will be used after the board shape has been chosen
 block_picking_manner = 0    # 0 = all blocks from stock_blocks, 1 = 3 random blocks from stock_blocks
 
