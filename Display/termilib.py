@@ -1,12 +1,11 @@
-"""
-Project : Termilib
-Description : Library to use the terminal
-Author : Brisset Dimitri
-"""
-
 import os
-import msvcrt
 import sys
+try:
+    import msvcrt
+    import_mode = "win"
+except:
+    import termios, tty
+    import_mode = "lin"
 import threading
 import time
 
@@ -33,6 +32,8 @@ def set_terminal_size(cols: int, rows: int) -> None:
     global buffer
     for i in range(rows):
         buffer.append(["{}{} ".format(fg_color, bg_color)] * (cols))
+    if import_mode == "win":
+        os.system('mode con: cols={} lines={}'.format(cols, rows))
     global size_x
     global size_y
     size_y = rows
@@ -84,6 +85,13 @@ def write_at(x: int, y: int, text: str) -> None:
             buffer[y][x + i] = fg_color + bg_color + text[i]
 
 
+def write_at_with_increment_gradient(x, y, text, color):
+    global buffer
+    for i in range(len(text)):
+        set_color(color + i)
+        write_at(x + i, y, text[i])
+
+
 def vertical_write_at(x: int, y: int, text: str) -> None:
     """
     Write the given text vertically at the given position
@@ -105,7 +113,6 @@ def write(text: str) -> None:
     :return: None
     """
     write_at(position_x, position_y, text)
-    move_cursor_at(position_x + len(text), position_y)
 
 
 def clear_screen() -> None:
@@ -113,7 +120,10 @@ def clear_screen() -> None:
     Clear the terminal screen
     :return: None
     """
-    os.system('cls')
+    if import_mode == "win":
+        os.system('cls')
+    else:
+        os.system('clear')
 
 
 def set_color(color: int) -> None:
@@ -126,6 +136,11 @@ def set_color(color: int) -> None:
     fg_color = "\033[38;5;{}m".format(color)
 
 
+def set_rgb_color(r, g, b):
+    global fg_color
+    fg_color = "\033[38;2;{};{};{}m".format(r, g, b)
+
+
 def set_background_color(color: int) -> None:
     """
     Set the background color
@@ -134,6 +149,11 @@ def set_background_color(color: int) -> None:
     """
     global bg_color
     bg_color = "\033[48;5;{}m".format(color)
+
+
+def set_rgb_background_color(r, g, b):
+    global bg_color
+    bg_color = "\033[48;2;{};{};{}m".format(r, g, b)
 
 
 def reset_color() -> None:
@@ -145,7 +165,7 @@ def reset_color() -> None:
     global bg_color
     fg_color = "\033[38;5;255m"
     bg_color = "\033[48;5;0m"
-    print(fg_color + bg_color, end="")
+    print(fg_color+bg_color, end="")
 
 
 def render() -> None:
@@ -159,8 +179,7 @@ def render() -> None:
     lines = []
     for i in range(len(buffer)):
         lines.append("".join(buffer[i]))
-    sys.stdout.write("\n".join(lines))
-    sys.stdout.flush()
+    print("\n".join(lines), end="")
 
 
 def clear_buffer() -> None:
@@ -252,7 +271,7 @@ def draw_rectangle(x: int, y: int, width: int, height: int, char: chr) -> None:
     draw_line(x, y, width, char)
     draw_line(x, y + height - 1, width, char)
     draw_column(x, y, height, char)
-    draw_column(x + width - 1, y, height, char)  # fix the opposite corner of the rectangle
+    draw_column(x + width - 1, y, height, char) #fix the opposite corner of the rectangle
 
 
 def draw_filled_rectangle(x: int, y: int, width: int, height: int, char: chr) -> None:
@@ -284,7 +303,7 @@ def compile_buffer() -> None:
             elif color != last_color:
                 last_color = color
             else:
-                buffer[i][j] = buffer[i][j][color_code_lenght + 1:]
+                buffer[i][j] = buffer[i][j][color_code_lenght+1:]
 
 
 def _extract_color_from_buffer_cell(x: int, y: int) -> tuple:
@@ -304,7 +323,8 @@ def _extract_color_from_buffer_cell(x: int, y: int) -> tuple:
         elif (color[i] == "m" and in_color):
             in_color = False
             last_color_index = i
-    return last_color_index, color[:last_color_index + 1]
+    return last_color_index,color[:last_color_index + 1]
+
 
 
 #
@@ -315,6 +335,7 @@ def _extract_color_from_buffer_cell(x: int, y: int) -> tuple:
 pressed_key = []
 __should_stop_key_reader_thread__ = False
 __should_stop_key_flusher_thread__ = False
+config_save = None
 
 
 def wait_for_key() -> chr:
@@ -322,6 +343,13 @@ def wait_for_key() -> chr:
     Wait for a key to be pressed
     :return: key pressed
     """
+    if import_mode == "win":
+        return wait_for_key_windows()
+    else:
+        return wait_for_key_linux()
+
+
+def wait_for_key_windows():
     key = msvcrt.getch()
     if key == b'\xe0':
         key = msvcrt.getch()
@@ -333,16 +361,23 @@ def wait_for_key() -> chr:
             key = b'right'
         elif key == b'K':
             key = b'left'
+    return key.decode('utf-8')  # convert byte string to string
+
+
+def wait_for_key_linux():
+    key = sys.stdin.read(1)
+    if key == "\x1b":
+        sys.stdin.read(1) # remove '[' character
+        key = sys.stdin.read(1)
+        if key == 'A':
+            key = 'up'
+        elif key == 'B':
+            key = 'down'
+        elif key == 'C':
+            key = 'right'
+        elif key == 'D':
+            key = 'left'
     return key
-
-
-def get_key() -> chr:
-    """
-    Get the last key pressed
-    :return: key pressed
-    """
-    if msvcrt.kbhit():
-        return wait_for_key()
 
 
 def __get_keys_task__() -> None:
@@ -352,7 +387,7 @@ def __get_keys_task__() -> None:
     """
     global pressed_key
     while True:
-        key = get_key()
+        key = wait_for_key()
         if key not in pressed_key:
             pressed_key.append(key)
         if __should_stop_key_reader_thread__:
@@ -409,6 +444,10 @@ def start_async_key_listener() -> None:
     Start the async key listener
     :return: None
     """
+    if import_mode == "lin":
+        global config_save
+        config_save = termios.tcgetattr(sys.stdin.fileno())
+        tty.setraw(sys.stdin.fileno())
     global __key_reader_thread__
     __key_reader_thread__ = threading.Thread(target=__get_keys_task__)
     __key_reader_thread__.start()
@@ -419,6 +458,8 @@ def stop_async_key_listener() -> None:
     Stop the async key listener
     :return: None
     """
+    if import_mode == "lin":
+        termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, config_save)
     global __should_stop_key_flusher_thread__
     global __should_stop_key_reader_thread__
 
@@ -458,24 +499,19 @@ def _get_key_code_(key: str) -> chr:
     :param key: key to get the code
     :return: key code
     """
-    if key == "up":
-        return b'up'
-    elif key == "down":
-        return b'down'
-    elif key == "right":
-        return b'right'
-    elif key == "left":
-        return b'left'
-    elif key == "enter":
-        return b'\r'
+    if key == "enter":
+        return '\r'
     elif key == "esc":
-        return b'\x1b'
+        return '\x1b'
     elif key == "space":
-        return b' '
+        return ' '
     elif key == "backspace":
-        return b'\x08'
+        if import_mode == "win":
+            return '\x08'
+        else:
+            return '\x7f'
     elif key == "tab":
-        return b'\t'
+        return '\t'
     else:
         return key
 
@@ -487,4 +523,4 @@ def is_key_pressed(key: str) -> bool:
     :return:
     """
     global pressed_key
-    return _get_key_code_(key) in pressed_key
+    return is_keycode_pressed(_get_key_code_(key))
