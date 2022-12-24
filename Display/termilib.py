@@ -1,3 +1,10 @@
+"""
+Project : Termilib
+Description : Library to use the terminal
+Author : Brisset Dimitri
+"""
+
+
 import os
 import sys
 try:
